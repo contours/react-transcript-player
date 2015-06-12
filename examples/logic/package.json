@@ -1,0 +1,17 @@
+{
+  "name": "logic",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "npm link ../..",
+    "serve": "budo index.js:bundle.js --live | garnish"
+  },
+  "dependencies": {
+    "react": "^0.13.3"
+  },
+  "devDependencies": {
+    "browserify": "^10.2.4",
+    "budo": "^4.0.0",
+    "garnish": "^2.1.3"
+  }
+}
