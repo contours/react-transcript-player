@@ -1,3 +1,5 @@
+See a [demo](http://contours.github.io/react-transcript-player/examples/logic/).
+
 To develop:
 
 1. `npm run build-watch` for live transpilation of the component.
