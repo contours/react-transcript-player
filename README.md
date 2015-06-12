@@ -6,7 +6,7 @@ To develop:
 
         cd examples/logic
         npm install
-        npm serve
+        npm run serve
         open http://localhost:9966/
 
 3. Now you can edit the files in `src` (or `examples/logic`) and
