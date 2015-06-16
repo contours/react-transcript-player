@@ -4,8 +4,10 @@ var React = require('react')
 
 module.exports = React.createClass(
   { componentDidMount() {
-      React.findDOMNode(this.refs.audio)
-        .addEventListener('timeupdate', this.handleTimeUpdate)
+      var node = React.findDOMNode(this.refs.audio)
+      node.addEventListener('timeupdate', this.handleTimeUpdate)
+      node.addEventListener('playing', this.handlePlaying)
+      node.addEventListener('ended', this.handleEnded)
     }
   , componentDidUpdate(prevProps) {
       if (this.props.seekTime !== prevProps.seekTime) {
@@ -19,6 +21,12 @@ module.exports = React.createClass(
   , handleTimeUpdate: function() {
       this.props.onTimeUpdate(
         parseInt(React.findDOMNode(this.refs.audio).currentTime * 1000))
+    }
+  , handlePlaying: function() {
+      this.props.onEnded(false)
+    }
+  , handleEnded: function() {
+      this.props.onEnded(true)
     }
   , seek: function() {
       if (this.props.seekTime !== null) {
