@@ -17,12 +17,12 @@
     "babel": "^5.5.6",
     "eslint": "^0.22.1",
     "eslint-plugin-react": "^2.5.0",
-    "watch": "^0.16.0"
+    "watchy": "^0.6.2"
   },
   "scripts": {
     "lint": "eslint --ext .jsx src",
     "transpile": "babel src -d lib",
     "build": "npm -s run lint && npm -s run transpile",
-    "build-watch": "watch 'npm -s run build' src"
+    "build-watch": "watchy -s -w src -i '/#|/flycheck_' -- npm -s run build"
   }
 }
