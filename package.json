@@ -21,8 +21,12 @@
   },
   "scripts": {
     "lint": "eslint --ext .jsx src",
-    "transpile": "babel src -d lib",
+    "transpile": "babel src -d lib --optional runtime --source-maps inline",
     "build": "npm -s run lint && npm -s run transpile",
     "build-watch": "watchy -s -w src -i '/#|/flycheck_' -- npm -s run build"
+  },
+  "dependencies": {
+    "babel-runtime": "^5.5.8",
+    "functify": "file:../functify"
   }
 }
