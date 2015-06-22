@@ -23,8 +23,7 @@ const SpeechView = React.createClass(
 )
 
 module.exports = React.createClass(
-  { mixins: [React.addons.PureRenderMixin]
-  , componentDidMount() {
+  { componentDidMount() {
       const root = React.findDOMNode(this)
       var status, end
       if (root.offsetHeight <= this.props.maxHeight) {
@@ -48,6 +47,7 @@ module.exports = React.createClass(
       this.props.onMounted(status, this.props.index, root.offsetHeight, end)
     }
   , shouldComponentUpdate: function(nextProps) {
+      if (nextProps.played !== this.props.played) return true
       if (nextProps.time < nextProps.speech[0].start) return false
       if (nextProps.time > nextProps.speech.slice(-1)[0].end) return false
       return true
