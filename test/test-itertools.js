@@ -1,7 +1,6 @@
 'use strict'
 
 var test = require('tape')
-  , {functify} = require('functify')
   , {range, enumerate} = require('../itertools.js')
 
 test('test range()', t => {
@@ -98,5 +97,5 @@ test('test range(1, 2, 0)', t => {
 test('test enumerate()', t => {
   const expected = [[0, 'a'], [1, 'b'], [2, 'c']]
   t.plan(1)
-  t.deepEqual(enumerate(functify(['a', 'b', 'c'])).toArray(), expected)
+  t.deepEqual(enumerate(['a', 'b', 'c']).toArray(), expected)
 })

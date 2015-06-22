@@ -2,7 +2,7 @@
 
 var React = require('react/addons')
   , TurnView = require('./transcript-turn')
-  , {functify} = require('functify')
+  , functify = require('functify')
   , {enumerate} = require('./itertools')
 
 module.exports = React.createClass(

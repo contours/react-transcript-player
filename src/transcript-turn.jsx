@@ -1,7 +1,6 @@
 'use strict'
 
 const React = require('react/addons')
-  , {functify} = require('functify')
   , {enumerate} = require('./itertools')
 
 function past(a, b) {
@@ -55,7 +54,7 @@ module.exports = React.createClass(
     }
   , render: function() {
       console.log(this.props)
-      const speechViews = enumerate(functify(this.props.speech))
+      const speechViews = enumerate(this.props.speech)
         .map(([index, speech]) => {
           return (
             [ <SpeechView

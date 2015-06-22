@@ -1,9 +1,9 @@
 "use strict"
 
-var {Functified} = require('functify')
+var functify = require('functify')
 
 const range = (start=0, stop=undefined, step=1) => {
-  return Functified.fromGenerator(function* () {
+  return functify.fromGenerator(function* () {
     const notYet = (step >= 0) ? x => (x < stop) : x => (x > stop)
     let i = start
     while (stop === undefined || notYet(i)) {
@@ -15,6 +15,6 @@ const range = (start=0, stop=undefined, step=1) => {
 
 module.exports =
   { range: range
-  , enumerate: iterable => Functified.zip([range(), iterable])
+  , enumerate: iterable => functify.zip([range(), iterable])
   }
 
