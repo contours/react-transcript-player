@@ -2,6 +2,10 @@
   "name": "react-transcript-player",
   "version": "0.0.0",
   "description": "React component for playing audio with a synced transcript",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/contours/react-transcript-player.git"
+  },
   "main": "lib/player.js",
   "keywords": [
     "react-component",
