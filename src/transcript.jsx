@@ -39,10 +39,19 @@ status ${status} height ${height} end ${end}`)
              , availableHeight: this.props.maxHeight }
     }
   , componentWillReceiveProps: function(nextProps) {
-      if (nextProps.time > this.state.endTime) {
+      if (nextProps.time > this.state.endTime ||
+          nextProps.time < this.state.startTime) {
+
+        let nextTurnIndex = 0
+        for (; nextTurnIndex < nextProps.turns.length - 1; nextTurnIndex++) {
+          if (nextProps.turns[nextTurnIndex].end > nextProps.time) {
+            break
+          }
+	}
         this.setState(
-          { startTime: this.state.endTime + 1
+          { startTime: nextProps.time
           , endTime: Number.MAX_VALUE
+          , nextTurnIndex: nextTurnIndex
           , availableHeight: this.props.maxHeight
           })
       }
