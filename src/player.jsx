@@ -24,20 +24,21 @@ module.exports = React.createClass(
     }
   , render: function() {
       var style =
-        { display: "flex"
-        , flexFlow: "column nowrap"
+        { border: '1px solid black'
         , width: 600
         }
       return (
       <div style={style}>
         <style scoped>{`
-.turn { padding: 0.25em; color: rgba(28,28,28,1); transition: color .7s ease }
+.turn { padding: 0.25em; color: rgba(28,28,28,1);
+        transition: color 1s ease }
 .turn:nth-child(odd) { background-color: #f1f1f1 }
 .speaker { margin-right: 0.5em; font-weight: bold }
-.speech { cursor: pointer; color: rgba(28,28,28,1); transition: color .7s ease }
+.speech { cursor: pointer; color: rgba(28,28,28,1);
+          transition: color 1s ease }
 .speech:hover { background-color: #d0effe;
                 outline: 0.2em solid #d0effe }
-.played { color: rgba(28,28,28,0.3) }
+.played { color: rgba(28,28,28,0.4) }
 `}</style>
         <AudioPlayer
           media={this.props.transcript.media}
