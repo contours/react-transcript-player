@@ -5,5 +5,6 @@ var React = require('react')
   , transcript = require('./media/transcript.json')
 
 React.render(
-  React.createElement(TranscriptPlayer, {transcript: transcript}),
+  React.createElement(
+    TranscriptPlayer, {transcript: transcript, maxHeight: 600}),
   document.getElementById('mount'))
