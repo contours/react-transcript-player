@@ -7,8 +7,6 @@ var React = require('react/addons')
 
 module.exports = React.createClass(
   { handleTurnMounted: function(status, index, height, end) {
-      console.log(`turn ${index} mounted:
-status ${status} height ${height} end ${end}`)
       var nextState = {}
       switch (status) {
         case 'ok':
@@ -73,7 +71,6 @@ status ${status} height ${height} end ${end}`)
         onSpeechClick={this.props.onSeekRequest} />
     }
   , render: function() {
-      console.log('STATE', this.state)
       const turnViews = enumerate(this.props.turns)
         .skipWhile(([, turn]) => turn.end < this.state.startTime)
         .takeUntil(([index, ]) => index > this.state.nextTurnIndex)

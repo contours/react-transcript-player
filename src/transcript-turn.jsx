@@ -53,7 +53,6 @@ module.exports = React.createClass(
       return true
     }
   , render: function() {
-      console.log(this.props)
       const speechViews = enumerate(this.props.speech)
         .map(([index, speech]) => {
           return (
