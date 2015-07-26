@@ -5,7 +5,10 @@ var React = require('react')
   , TranscriptView = require('./transcript')
 
 module.exports = React.createClass(
-  { getInitialState: function() {
+  { getDefaultProps: function() {
+      return { maxHeight: Number.MAX_VALUE }
+    }
+  , getInitialState: function() {
       return {time: 0, seekTime: null, ended: false}
     }
   , handleTimeUpdate: function(time) {
@@ -46,7 +49,9 @@ module.exports = React.createClass(
           onTimeUpdate={this.handleTimeUpdate}
           onEnded={this.handleEnded} />
         <TranscriptView
-          transcript={this.props.transcript}
+          speakers={this.props.transcript.speakers}
+          turns={this.props.transcript.turns}
+          maxHeight={this.props.maxHeight}
           time={this.state.time} ended={this.state.ended}
           onSeekRequest={this.handleSeekRequest} />
       </div>

@@ -21,12 +21,19 @@
     "babel": "^5.5.6",
     "eslint": "^0.22.1",
     "eslint-plugin-react": "^2.5.0",
+    "tape": "^4.0.0",
     "watchy": "^0.6.2"
   },
   "scripts": {
     "lint": "eslint --ext .jsx src",
-    "transpile": "babel src -d lib",
+    "transpile": "babel src -d lib --optional runtime --source-maps inline",
+    "transpile-tests": "npm -s run transpile && babel test -d lib/test",
+    "test": "npm -s run transpile-tests && tape lib/test/*.js",
     "build": "npm -s run lint && npm -s run transpile",
     "build-watch": "watchy -s -w src -i '/#|/flycheck_' -- npm -s run build"
+  },
+  "dependencies": {
+    "babel-runtime": "^5.6.3",
+    "functify": "file:../functify"
   }
 }
