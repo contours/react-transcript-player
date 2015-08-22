@@ -2,6 +2,7 @@
 
 var React = require('react')
   , AudioPlayer = require('./audio')
+  , SearchBox = require('./searchbox')
   , TranscriptView = require('./transcript')
 
 module.exports = React.createClass(
@@ -9,7 +10,7 @@ module.exports = React.createClass(
       return { maxHeight: Number.MAX_VALUE }
     }
   , getInitialState: function() {
-      return {time: 0, seekTime: null, ended: false}
+      return {time: 0, seekTime: null, ended: false, query: null}
     }
   , handleTimeUpdate: function(time) {
       if (this.state.seekTime !== null &&
@@ -24,6 +25,9 @@ module.exports = React.createClass(
     }
   , handleSeekRequest: function(seekTime) {
       this.setState({seekTime: seekTime, ended: false})
+    }
+  , handleQuery: function(query) {
+      this.setState({query: query === '' ? null : new RegExp(query, 'ig')})
     }
   , render: function() {
       var style =
@@ -48,9 +52,12 @@ module.exports = React.createClass(
           seekTime={this.state.seekTime}
           onTimeUpdate={this.handleTimeUpdate}
           onEnded={this.handleEnded} />
+        <SearchBox
+          onQuery={this.handleQuery} />
         <TranscriptView
           speakers={this.props.transcript.speakers}
           turns={this.props.transcript.turns}
+          highlight={this.state.query}
           maxHeight={this.props.maxHeight}
           time={this.state.time} ended={this.state.ended}
           onSeekRequest={this.handleSeekRequest} />
