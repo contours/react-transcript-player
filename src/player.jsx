@@ -3,6 +3,7 @@
 var React = require('react')
   , AudioPlayer = require('./audio')
   , SearchBox = require('./searchbox')
+  , SearchResults = require('./searchresults')
   , TranscriptView = require('./transcript')
   , search = require('./search')
 
@@ -15,7 +16,7 @@ module.exports = React.createClass(
         { time: 0
         , seekTime: null
         , ended: false
-        , searchResults: search.buildMatchIndex(this.props.transcript.turns)
+        , searchResults: search.execute(this.props.transcript.turns)
         })
     }
   , handleTimeUpdate: function(time) {
@@ -34,7 +35,7 @@ module.exports = React.createClass(
     }
   , handleQuery: function(query) {
       const re = query === '' ? null : new RegExp(query, 'ig')
-          , results = search.buildMatchIndex(this.props.transcript.turns, re)
+          , results = search.execute(this.props.transcript.turns, re)
       this.setState({searchResults: results})
     }
   , render: function() {
@@ -53,6 +54,7 @@ module.exports = React.createClass(
           transition: color 1s ease }
 .speech:hover { background-color: #d0effe;
                 outline: 0.2em solid #d0effe }
+.speech strong { color: red; font-weight: normal }
 .played { color: rgba(28,28,28,0.4) }
 `}</style>
         <AudioPlayer
@@ -62,10 +64,11 @@ module.exports = React.createClass(
           onEnded={this.handleEnded} />
         <SearchBox
           onQuery={this.handleQuery} />
+        <SearchResults count={this.state.searchResults.get('count')} />
         <TranscriptView
           speakers={this.props.transcript.speakers}
           turns={this.props.transcript.turns}
-          highlights={this.state.searchResults}
+          highlights={this.state.searchResults.get('matches')}
           maxHeight={this.props.maxHeight}
           time={this.state.time} ended={this.state.ended}
           onSeekRequest={this.handleSeekRequest} />

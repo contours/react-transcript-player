@@ -29,7 +29,7 @@ const findMatchOffsets = (speech, matches) => {
   })
 }
 
-const buildMatchIndex = (turns, re=null) => {
+const buildMatchIndex = (turns, re) => {
   return Immutable.fromJS(turns.map(turn => {
     const text = turn.sentences.join(' ')
     let match, matches = []
@@ -42,8 +42,18 @@ const buildMatchIndex = (turns, re=null) => {
   }))
 }
 
+const execute = (turns, re=null) => {
+  const matches = buildMatchIndex(turns, re)
+  return Immutable.Map(
+    { matches: matches
+    , count: matches.flatten(2).size
+    }
+  )
+}
+
 module.exports =
   { matchesToIntervals
   , findSpeechOffsets
   , findMatchOffsets
-  , buildMatchIndex }
+  , buildMatchIndex
+  , execute }
