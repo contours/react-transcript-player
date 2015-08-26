@@ -4,10 +4,6 @@ const React = require('react/addons')
   , functify = require('functify')
   , highlight = require('./highlight')
 
-function past(a, b) {
-  return a >= (b - 1)
-}
-
 const SpeechView = React.createClass(
   { mixins: [React.addons.PureRenderMixin]
   , handleClick: function() {
@@ -74,7 +70,7 @@ module.exports = React.createClass(
                 start={speech.start}
                 text={speech.text}
                 highlights={this.props.highlights.get(speech.index)}
-                played={this.props.played || past(this.props.time, speech.end)}
+                played={this.props.played || this.props.time > speech.end}
                 onClick={this.props.onSpeechClick} />
             , ' '
             ])})
