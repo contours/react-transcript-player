@@ -20,9 +20,11 @@ const SpeechView = React.createClass(
                          : <span key={index}>{text}</span>)
     }
   , render: function() {
+      let className = 'speech'
+      if (this.props.played) className += ' played'
+      if (this.props.highlights.size > 0) className += ' highlighted'
       return (
-        <span className={this.props.played ? 'speech played' : 'speech'}
-          onClick={this.handleClick}
+        <span className={className} onClick={this.handleClick}
         >{this.highlight()}</span>
       )
     }

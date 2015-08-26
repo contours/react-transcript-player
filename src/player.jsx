@@ -70,6 +70,9 @@ module.exports = React.createClass(
 .speech:hover { background-color: #d0effe;
                 outline: 0.2em solid #d0effe }
 .speech strong { color: red; font-weight: normal }
+.speech.highlighted { text-decoration: underline;
+                      text-decoration-color: #bfbfbf;
+                      -webkit-text-decoration-color: #bfbfbf; }
 .played { color: rgba(28,28,28,0.4) }
 `}</style>
         <AudioPlayer
