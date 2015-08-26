@@ -17,6 +17,7 @@ module.exports = React.createClass(
         , seekTime: null
         , ended: false
         , searchResults: search.execute(this.props.transcript.turns)
+        , resultIndex: null
         })
     }
   , handleTimeUpdate: function(time) {
@@ -36,7 +37,21 @@ module.exports = React.createClass(
   , handleQuery: function(query) {
       const re = query === '' ? null : new RegExp(query, 'ig')
           , results = search.execute(this.props.transcript.turns, re)
-      this.setState({searchResults: results})
+      this.setState({searchResults: results, resultIndex: null})
+    }
+  , handleNavigateResult: function(direction) {
+      if (this.state.searchResults.get('count') === 0) return
+      const times = this.state.searchResults.get('times')
+      let index = this.state.resultIndex
+      if (direction === 'forward') {
+        index = (index === null) ? 0 : index + 1
+        if (index === times.size) index = 0
+      } else {
+        index = (index === null) ? times.size - 1 : index - 1
+        if (index < 0) index = times.size - 1
+      }
+      this.setState({resultIndex: index})
+      this.handleSeekRequest(times.get(index))
     }
   , render: function() {
       var style =
@@ -64,7 +79,9 @@ module.exports = React.createClass(
           onEnded={this.handleEnded} />
         <SearchBox
           onQuery={this.handleQuery} />
-        <SearchResults count={this.state.searchResults.get('count')} />
+        <SearchResults
+          count={this.state.searchResults.get('count')}
+          onNavigateResult={this.handleNavigateResult} />
         <TranscriptView
           speakers={this.props.transcript.speakers}
           turns={this.props.transcript.turns}

@@ -44,8 +44,15 @@ const buildMatchIndex = (turns, re) => {
 
 const execute = (turns, re=null) => {
   const matches = buildMatchIndex(turns, re)
+  let times = Immutable.List()
+  for (let [ti, t] of matches.entries()) {
+    for (let [si, s] of t.entries()) {
+      if (s.size > 0) times = times.push(turns[ti].speech[si].start)
+    }
+  }
   return Immutable.Map(
     { matches: matches
+    , times: times
     , count: matches.flatten(2).size
     }
   )

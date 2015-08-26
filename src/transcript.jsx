@@ -2,7 +2,6 @@
 
 var React = require('react/addons')
   , TurnView = require('./transcript-turn')
-  , functify = require('functify')
   , {enumerate} = require('./itertools')
 
 module.exports = React.createClass(
@@ -55,7 +54,8 @@ module.exports = React.createClass(
       }
     }
   , createTurnView: function(index, turn) {
-      const speech = functify(turn.speech)
+      const speech = enumerate(turn.speech)
+              .map(([i, s]) => { s.index = i; return s })
               .skipWhile(s => s.end < this.state.startTime)
               .takeUntil(s => s.start > this.state.endTime)
               .toArray()

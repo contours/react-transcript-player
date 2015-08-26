@@ -3,11 +3,18 @@
 var React = require('react')
 
 module.exports = React.createClass(
-  { render: function() {
+  { handleBackwardClick: function() {
+      this.props.onNavigateResult('backward')
+    }
+  , handleForwardClick: function() {
+      this.props.onNavigateResult('forward')
+    }
+  , render: function() {
       return (
         <div>
           <span>{this.props.count} matches </span>
-          <button>&lt;</button><button>&gt;</button>
+          <button onClick={this.handleBackwardClick}>&lt;</button>
+          <button onClick={this.handleForwardClick}>&gt;</button>
         </div>
       )
     }

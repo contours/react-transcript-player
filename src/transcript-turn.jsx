@@ -1,7 +1,7 @@
 'use strict'
 
 const React = require('react/addons')
-  , {enumerate} = require('./itertools')
+  , functify = require('functify')
   , highlight = require('./highlight')
 
 function past(a, b) {
@@ -37,9 +37,11 @@ module.exports = React.createClass(
         status = 'ok'
         end = this.props.speech.slice(-1)[0].end
       } else {
-        let i = this.props.speech.length - 1
+        let nodes = React.findDOMNode(this.refs.speech)
+                         .getElementsByClassName('speech')
+        let i = nodes.length - 1
         for (; i >= 0; i--) {
-          React.findDOMNode(this.refs['speech-' + i]).style.display = 'none'
+          nodes.item(i).style.display = 'none'
           if (root.offsetHeight <= this.props.maxHeight) {
             break
           }
@@ -53,6 +55,7 @@ module.exports = React.createClass(
       }
       this.props.onMounted(status, this.props.index, root.offsetHeight, end)
     }
+/*
   , shouldComponentUpdate: function(nextProps) {
       if (!nextProps.highlights.equals(this.props.highlights)) return true
       if (nextProps.played !== this.props.played) return true
@@ -60,15 +63,15 @@ module.exports = React.createClass(
       if (nextProps.time > nextProps.speech.slice(-1)[0].end) return false
       return true
     }
+*/
   , render: function() {
-      const speechViews = enumerate(this.props.speech)
-        .map(([index, speech]) => {
+      const speechViews = functify(this.props.speech)
+        .map(speech => {
           return (
             [ <SpeechView
-                ref={'speech-' + index}
                 start={speech.start}
                 text={speech.text}
-                highlights={this.props.highlights.get(index)}
+                highlights={this.props.highlights.get(speech.index)}
                 played={this.props.played || past(this.props.time, speech.end)}
                 onClick={this.props.onSpeechClick} />
             , ' '
@@ -77,7 +80,7 @@ module.exports = React.createClass(
       return (
         <div className={this.props.played ? 'turn played' : 'turn'}>
           <span className="speaker">{this.props.speaker}</span>
-          {speechViews}
+          <div style={{display: 'inline'}} ref="speech">{speechViews}</div>
         </div>
       )
     }
