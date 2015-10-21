@@ -10,27 +10,22 @@ const matchesToIntervals = (matches) => {
 const findSpeechOffsets = (speech) => {
   return speech.reduce(([start, offsets], segment) => {
     let end = start + segment.text.length
-    offsets.push({offset: [start, end], start: segment.start})
+    offsets.push([start, end])
     return [ end + 1, offsets ]
   }, [0, []])[1]
 }
 
 const findMatchOffsets = (speech, matches) => {
   const tree = createIntervalTree(matchesToIntervals(matches))
-  return findSpeechOffsets(speech).map(segment => {
-    let [start, end] = segment.offset
-      , offsets = []
+  return findSpeechOffsets(speech).map(([start, end]) => {
+    let highlights = []
     tree.queryInterval(start, end, (match) => {
-      offsets.push(
+      highlights.push(
         [ Math.max(0, match[0] - start)
         , Math.min(end - start, match[1] - start)
         ])
     })
-    return (
-      { offsets: offsets.sort((a, b) => a[0] - b[0])
-      , start: segment.start
-      }
-    )
+    return highlights.sort((a, b) => a[0] - b[0])
   })
 }
 
