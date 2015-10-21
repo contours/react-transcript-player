@@ -38,8 +38,7 @@ module.exports = React.createClass(
         status = 'ok'
         end = this.props.speech.slice(-1)[0].end
       } else {
-        let nodes = ReactDOM.findDOMNode(this.refs.speech)
-                            .getElementsByClassName('speech')
+        let nodes = this.refs.speech.getElementsByClassName('speech')
         let i = nodes.length - 1
         for (; i >= 0; i--) {
           nodes.item(i).style.display = 'none'

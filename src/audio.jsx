@@ -1,7 +1,6 @@
 'use strict'
 
 var React = require('react')
-  , ReactDOM = require('react-dom')
 
 module.exports = React.createClass(
   { componentDidUpdate(prevProps) {
@@ -11,7 +10,7 @@ module.exports = React.createClass(
     }
   , handleTimeUpdate: function() {
       this.props.onTimeUpdate(
-        parseInt(ReactDOM.findDOMNode(this.refs.audio).currentTime * 1000))
+        parseInt(this.refs.audio.currentTime * 1000))
     }
   , handlePlaying: function() {
       this.props.onEnded(false)
@@ -21,8 +20,7 @@ module.exports = React.createClass(
     }
   , seek: function() {
       if (this.props.seekTime !== null) {
-        ReactDOM.findDOMNode(this.refs.audio)
-          .currentTime = this.props.seekTime / 1000
+        this.refs.audio.currentTime = this.props.seekTime / 1000
       }
     }
   , render: function() {
