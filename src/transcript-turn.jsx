@@ -1,11 +1,13 @@
 'use strict'
 
-const React = require('react/addons')
+const React = require('react')
+  , ReactDOM = require('react-dom')
+  , PureRenderMixin = require('react-addons-pure-render-mixin')
   , functify = require('functify')
   , highlight = require('./highlight')
 
 const SpeechView = React.createClass(
-  { mixins: [React.addons.PureRenderMixin]
+  { mixins: [PureRenderMixin]
   , handleClick: function() {
       this.props.onClick(this.props.start)
     }
@@ -29,14 +31,14 @@ const SpeechView = React.createClass(
 
 module.exports = React.createClass(
   { componentDidMount() {
-      const root = React.findDOMNode(this)
+      const root = ReactDOM.findDOMNode(this)
       var status, end
       if (root.offsetHeight <= this.props.maxHeight) {
         status = 'ok'
         end = this.props.speech.slice(-1)[0].end
       } else {
-        let nodes = React.findDOMNode(this.refs.speech)
-                         .getElementsByClassName('speech')
+        let nodes = ReactDOM.findDOMNode(this.refs.speech)
+                            .getElementsByClassName('speech')
         let i = nodes.length - 1
         for (; i >= 0; i--) {
           nodes.item(i).style.display = 'none'

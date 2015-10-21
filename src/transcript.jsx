@@ -1,6 +1,6 @@
 'use strict'
 
-var React = require('react/addons')
+var React = require('react')
   , TurnView = require('./transcript-turn')
   , {enumerate} = require('./itertools')
 
