@@ -3,6 +3,7 @@
 var React = require('react')
   , TurnView = require('./transcript-turn')
   , {enumerate} = require('./itertools')
+  , {progress} = require('./utils')
 
 module.exports = React.createClass(
   { handleTurnMounted: function(status, index, height, end) {
@@ -68,9 +69,7 @@ module.exports = React.createClass(
         sentences={turn.sentences}
         highlights={this.props.highlights.get(index)}
         time={this.props.time}
-        played={this.props.ended || this.props.time > (turn.end + 5)}
-        playing={!this.props.ended && (this.props.time >= turn.start
-                                    && this.props.time <= turn.end)}
+        progress={progress(this.props.time, turn.start, turn.end)}
         onMounted={this.handleTurnMounted}
         onSpeechClick={this.props.onSeekRequest} />
     }
@@ -80,7 +79,7 @@ module.exports = React.createClass(
         .takeUntil(([index, ]) => index > this.state.nextTurnIndex)
         .map(([index, turn]) => this.createTurnView(index, turn))
         .toArray()
-      return <div>{turnViews}</div>
+      return <div style={{marginTop: '2px'}}>{turnViews}</div>
     }
   }
 )

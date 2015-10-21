@@ -55,14 +55,14 @@ module.exports = React.createClass(
       this.handleSeekRequest(times.get(index))
     }
   , render: function() {
-      var style =
-        { border: '1px solid black'
-        , width: 600
-        }
+      var style = { width: 600 }
+        , searchResults = <SearchResults
+            count={this.state.searchResults.get('count')}
+            onNavigateResult={this.handleNavigateResult} />
       return (
       <div style={style}>
         <style scoped>{`
-.turn { padding: 0.25em;
+.turn { padding: 0.5em;
         color: rgba(71,91,98,1);
         transition: color 0.4s ease; }
 .turn:nth-child(odd) { background-color: #f1f1f1; }
@@ -90,9 +90,7 @@ module.exports = React.createClass(
         <SearchBox
           query={this.state.query}
           onQuery={this.handleQuery} />
-        <SearchResults
-          count={this.state.searchResults.get('count')}
-          onNavigateResult={this.handleNavigateResult} />
+        {this.state.query ? searchResults : ''}
         <TranscriptView
           speakers={this.props.transcript.speakers}
           turns={this.props.transcript.turns}

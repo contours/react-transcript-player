@@ -5,6 +5,7 @@ const React = require('react')
   , PureRenderMixin = require('react-addons-pure-render-mixin')
   , functify = require('functify')
   , highlight = require('./highlight')
+  , {progress} = require('./utils')
 
 const SpeechView = React.createClass(
   { mixins: [PureRenderMixin]
@@ -18,9 +19,7 @@ const SpeechView = React.createClass(
                          : <span key={index}>{text}</span>)
     }
   , render: function() {
-      let className = 'speech'
-      if (this.props.played) className += ' played'
-      else if (this.props.playing) className += ' playing'
+      let className = 'speech ' + this.props.progress
       if (this.props.highlights.size > 0) className += ' highlighted'
       return (
         <span className={className} onClick={this.handleClick}
@@ -55,15 +54,7 @@ module.exports = React.createClass(
       }
       this.props.onMounted(status, this.props.index, root.offsetHeight, end)
     }
-/*
-  , shouldComponentUpdate: function(nextProps) {
-      if (!nextProps.highlights.equals(this.props.highlights)) return true
-      if (nextProps.played !== this.props.played) return true
-      if (nextProps.time < nextProps.speech[0].start) return false
-      if (nextProps.time > nextProps.speech.slice(-1)[0].end) return false
-      return true
-    }
-*/
+
   , render: function() {
       const speechViews = functify(this.props.speech)
         .map(speech => {
@@ -72,16 +63,12 @@ module.exports = React.createClass(
                 start={speech.start}
                 text={speech.text}
                 highlights={this.props.highlights.get(speech.index)}
-                played={this.props.played || this.props.time > (speech.end + 5)}
-                playing={this.props.time >= speech.start &&
-                         this.props.time <= speech.end}
+                progress={progress(this.props.time, speech.start, speech.end)}
                 onClick={this.props.onSpeechClick} />
             , ' '
             ])})
          .toArray()
-      let className = 'turn'
-      if (this.props.played) className += ' played'
-      else if (this.props.playing) className += ' playing'
+      let className = 'turn ' + this.props.progress
       return (
         <div className={className}>
           <span className="speaker">{this.props.speaker}</span>

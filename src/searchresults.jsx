@@ -11,7 +11,7 @@ module.exports = React.createClass(
     }
   , render: function() {
       return (
-        <div>
+        <div style={{display: 'inline', marginLeft: '1em'}}>
           <span>{this.props.count} matches </span>
           <button onClick={this.handleBackwardClick}>&lt;</button>
           <button onClick={this.handleForwardClick}>&gt;</button>

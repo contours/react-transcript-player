@@ -14,13 +14,13 @@ module.exports = React.createClass(
     }
   , render: function() {
       return (
-        <div>
+        <div style={{display: 'inline'}}>
           <input
             type="text"
             value={this.props.query}
             onChange={this.handleChange} />
           <button
-            style={{display: this.props.query ? 'inline' : 'none'}}
+            style={{visibility: this.props.query ? 'visible' : 'hidden'}}
             onClick={this.handleClearClick}>x</button>
         </div>
       )
