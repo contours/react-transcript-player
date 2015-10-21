@@ -9,13 +9,10 @@
     "go-pages": "git stash && git co gh-pages",
     "publish": "npm -s run dist && npm -s run go-pages && mv -f dist-bundle.js bundle.js && git add bundle.js && git commit --allow-empty -m 'Updated demo bundle.' bundle.js && git push && git co master && STASHED=$(git stash list) ; if (( ${#STASHED} > 0 )) ; then git stash pop ; fi"
   },
-  "dependencies": {
-    "react": "^0.13.3"
-  },
   "devDependencies": {
-    "browserify": "^10.2.4",
-    "budo": "^4.0.0",
-    "garnish": "^2.1.3",
-    "uglify-js": "^2.4.23"
+    "browserify": "^11.2.0",
+    "budo": "^5.1.5",
+    "garnish": "^3.2.1",
+    "uglify-js": "^2.5.0"
   }
 }
