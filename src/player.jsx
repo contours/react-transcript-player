@@ -16,6 +16,7 @@ module.exports = React.createClass(
         { time: 0
         , seekTime: null
         , ended: false
+        , query: ''
         , searchResults: search.execute(this.props.transcript.turns)
         , resultIndex: null
         })
@@ -37,7 +38,7 @@ module.exports = React.createClass(
   , handleQuery: function(query) {
       const re = query === '' ? null : new RegExp(query, 'ig')
           , results = search.execute(this.props.transcript.turns, re)
-      this.setState({searchResults: results, resultIndex: null})
+      this.setState({query: query, searchResults: results, resultIndex: null})
     }
   , handleNavigateResult: function(direction) {
       if (this.state.searchResults.get('count') === 0) return
@@ -87,6 +88,7 @@ module.exports = React.createClass(
           onTimeUpdate={this.handleTimeUpdate}
           onEnded={this.handleEnded} />
         <SearchBox
+          query={this.state.query}
           onQuery={this.handleQuery} />
         <SearchResults
           count={this.state.searchResults.get('count')}
