@@ -20,6 +20,7 @@ const SpeechView = React.createClass(
   , render: function() {
       let className = 'speech'
       if (this.props.played) className += ' played'
+      else if (this.props.playing) className += ' playing'
       if (this.props.highlights.size > 0) className += ' highlighted'
       return (
         <span className={className} onClick={this.handleClick}
@@ -72,13 +73,18 @@ module.exports = React.createClass(
                 start={speech.start}
                 text={speech.text}
                 highlights={this.props.highlights.get(speech.index)}
-                played={this.props.played || this.props.time > speech.end}
+                played={this.props.played || this.props.time > (speech.end + 5)}
+                playing={this.props.time >= speech.start &&
+                         this.props.time <= speech.end}
                 onClick={this.props.onSpeechClick} />
             , ' '
             ])})
          .toArray()
+      let className = 'turn'
+      if (this.props.played) className += ' played'
+      else if (this.props.playing) className += ' playing'
       return (
-        <div className={this.props.played ? 'turn played' : 'turn'}>
+        <div className={className}>
           <span className="speaker">{this.props.speaker}</span>
           <div style={{display: 'inline'}} ref="speech">{speechViews}</div>
         </div>

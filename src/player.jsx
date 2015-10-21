@@ -61,19 +61,25 @@ module.exports = React.createClass(
       return (
       <div style={style}>
         <style scoped>{`
-.turn { padding: 0.25em; color: rgba(28,28,28,1);
-        transition: color 1s ease }
-.turn:nth-child(odd) { background-color: #f1f1f1 }
-.speaker { margin-right: 0.5em; font-weight: bold }
-.speech { cursor: pointer; color: rgba(28,28,28,1);
-          transition: color 1s ease }
-.speech:hover { background-color: #d0effe;
-                outline: 0.2em solid #d0effe }
-.speech strong { color: red; font-weight: normal }
+.turn { padding: 0.25em;
+        color: rgba(71,91,98,1);
+        transition: color 0.4s ease; }
+.turn:nth-child(odd) { background-color: #f1f1f1; }
+.speaker { margin-right: 0.5em;
+           font-weight: bold; }
+.speech { cursor: pointer;
+          color: rgba(71,91,98,1);
+          transition: color 0.4s ease; }
+.speech:hover { color: rgba(4,32,40,1);
+                background-color: #d0effe;
+                outline: 0.2em solid #d0effe; }
+.speech strong { color: red;
+                 font-weight: normal; }
 .speech.highlighted { text-decoration: underline;
                       text-decoration-color: #bfbfbf;
                       -webkit-text-decoration-color: #bfbfbf; }
-.played { color: rgba(28,28,28,0.4) }
+.played { color: rgba(71,91,98,0.5); }
+.speech.playing { color: red; }
 `}</style>
         <AudioPlayer
           media={this.props.transcript.media}

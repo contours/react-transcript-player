@@ -68,7 +68,9 @@ module.exports = React.createClass(
         sentences={turn.sentences}
         highlights={this.props.highlights.get(index)}
         time={this.props.time}
-        played={this.props.ended || this.props.time > turn.end}
+        played={this.props.ended || this.props.time > (turn.end + 5)}
+        playing={!this.props.ended && (this.props.time >= turn.start
+                                    && this.props.time <= turn.end)}
         onMounted={this.handleTurnMounted}
         onSpeechClick={this.props.onSeekRequest} />
     }
