@@ -3,24 +3,14 @@
 var React = require('react')
 
 module.exports = React.createClass(
-  { componentDidMount() {
-      var node = React.findDOMNode(this.refs.audio)
-      node.addEventListener('timeupdate', this.handleTimeUpdate)
-      node.addEventListener('playing', this.handlePlaying)
-      node.addEventListener('ended', this.handleEnded)
-    }
-  , componentDidUpdate(prevProps) {
+  { componentDidUpdate(prevProps) {
       if (this.props.seekTime !== prevProps.seekTime) {
         this.seek()
       }
     }
-  , componentWillUnmount() {
-      React.findDOMNode(this.refs.audio)
-        .removeEventListener('timeupdate', this.handleTimeUpdate)
-    }
   , handleTimeUpdate: function() {
       this.props.onTimeUpdate(
-        parseInt(React.findDOMNode(this.refs.audio).currentTime * 1000))
+        parseInt(this.refs.audio.currentTime * 1000))
     }
   , handlePlaying: function() {
       this.props.onEnded(false)
@@ -30,14 +20,19 @@ module.exports = React.createClass(
     }
   , seek: function() {
       if (this.props.seekTime !== null) {
-        React.findDOMNode(this.refs.audio)
-          .currentTime = this.props.seekTime / 1000
+        this.refs.audio.currentTime = this.props.seekTime / 1000
       }
     }
   , render: function() {
       return (
         <div>
-          <audio ref="audio" src={this.props.media} controls></audio>
+          <audio ref="audio" controls
+                 style={{width: 600}}
+                 src={this.props.media}
+                 onTimeUpdate={this.handleTimeUpdate}
+                 onPlaying={this.handlePlaying}
+                 onEnded={this.handleEnded}
+          ></audio>
         </div>
       )
     }

@@ -1,22 +1,29 @@
 'use strict'
 
-const React = require('react/addons')
-  , {enumerate} = require('./itertools')
-
-function past(a, b) {
-  return a >= (b - 1)
-}
+const React = require('react')
+  , ReactDOM = require('react-dom')
+  , PureRenderMixin = require('react-addons-pure-render-mixin')
+  , functify = require('functify')
+  , highlight = require('./highlight')
+  , {progress} = require('./utils')
 
 const SpeechView = React.createClass(
-  { mixins: [React.addons.PureRenderMixin]
+  { mixins: [PureRenderMixin]
   , handleClick: function() {
       this.props.onClick(this.props.start)
     }
+  , highlight: function() {
+      return highlight(this.props.text, this.props.highlights)
+        .map(([highlighted, text], index) =>
+             highlighted ? <strong key={index}>{text}</strong>
+                         : <span key={index}>{text}</span>)
+    }
   , render: function() {
+      let className = 'speech ' + this.props.progress
+      if (this.props.highlights.size > 0) className += ' highlighted'
       return (
-        <span className={this.props.played ? 'speech played' : 'speech'}
-          onClick={this.handleClick}
-        >{this.props.text}</span>
+        <span className={className} onClick={this.handleClick}
+        >{this.highlight()}</span>
       )
     }
   }
@@ -24,15 +31,16 @@ const SpeechView = React.createClass(
 
 module.exports = React.createClass(
   { componentDidMount() {
-      const root = React.findDOMNode(this)
+      const root = ReactDOM.findDOMNode(this)
       var status, end
       if (root.offsetHeight <= this.props.maxHeight) {
         status = 'ok'
         end = this.props.speech.slice(-1)[0].end
       } else {
-        let i = this.props.speech.length - 1
+        let nodes = this.refs.speech.getElementsByClassName('speech')
+        let i = nodes.length - 1
         for (; i >= 0; i--) {
-          React.findDOMNode(this.refs['speech-' + i]).style.display = 'none'
+          nodes.item(i).style.display = 'none'
           if (root.offsetHeight <= this.props.maxHeight) {
             break
           }
@@ -46,29 +54,25 @@ module.exports = React.createClass(
       }
       this.props.onMounted(status, this.props.index, root.offsetHeight, end)
     }
-  , shouldComponentUpdate: function(nextProps) {
-      if (nextProps.played !== this.props.played) return true
-      if (nextProps.time < nextProps.speech[0].start) return false
-      if (nextProps.time > nextProps.speech.slice(-1)[0].end) return false
-      return true
-    }
+
   , render: function() {
-      const speechViews = enumerate(this.props.speech)
-        .map(([index, speech]) => {
+      const speechViews = functify(this.props.speech)
+        .map(speech => {
           return (
             [ <SpeechView
-                ref={'speech-' + index}
                 start={speech.start}
                 text={speech.text}
-                played={this.props.played || past(this.props.time, speech.end)}
+                highlights={this.props.highlights.get(speech.index)}
+                progress={progress(this.props.time, speech.start, speech.end)}
                 onClick={this.props.onSpeechClick} />
             , ' '
             ])})
          .toArray()
+      let className = 'turn ' + this.props.progress
       return (
-        <div className={this.props.played ? 'turn played' : 'turn'}>
+        <div className={className}>
           <span className="speaker">{this.props.speaker}</span>
-          {speechViews}
+          <div style={{display: 'inline'}} ref="speech">{speechViews}</div>
         </div>
       )
     }

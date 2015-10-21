@@ -1,9 +1,9 @@
 'use strict'
 
-var React = require('react/addons')
+var React = require('react')
   , TurnView = require('./transcript-turn')
-  , functify = require('functify')
   , {enumerate} = require('./itertools')
+  , {progress} = require('./utils')
 
 module.exports = React.createClass(
   { handleTurnMounted: function(status, index, height, end) {
@@ -55,7 +55,8 @@ module.exports = React.createClass(
       }
     }
   , createTurnView: function(index, turn) {
-      const speech = functify(turn.speech)
+      const speech = enumerate(turn.speech)
+              .map(([i, s]) => { s.index = i; return s })
               .skipWhile(s => s.end < this.state.startTime)
               .takeUntil(s => s.start > this.state.endTime)
               .toArray()
@@ -65,8 +66,10 @@ module.exports = React.createClass(
         maxHeight={this.state.availableHeight}
         speaker={this.props.speakers[turn.speaker]}
         speech={speech}
+        sentences={turn.sentences}
+        highlights={this.props.highlights.get(index)}
         time={this.props.time}
-        played={this.props.ended || this.props.time > turn.end}
+        progress={progress(this.props.time, turn.start, turn.end)}
         onMounted={this.handleTurnMounted}
         onSpeechClick={this.props.onSeekRequest} />
     }
@@ -76,7 +79,7 @@ module.exports = React.createClass(
         .takeUntil(([index, ]) => index > this.state.nextTurnIndex)
         .map(([index, turn]) => this.createTurnView(index, turn))
         .toArray()
-      return <div>{turnViews}</div>
+      return <div style={{marginTop: '2px'}}>{turnViews}</div>
     }
   }
 )
