@@ -68,11 +68,12 @@ module.exports = React.createClass(
             , ' '
             ])})
          .toArray()
-      let className = 'turn ' + this.props.progress
+      let className = 'turn ' + this.props.progress + ' p1'
+      className += this.props.index % 2 ? ' bg-white' : ' bg-silver'
       return (
-        <div className={className}>
-          <span className="speaker">{this.props.speaker}</span>
-          <div style={{display: 'inline'}} ref="speech">{speechViews}</div>
+        <div className={className} style={{transition: 'color 0.4s ease'}}>
+          <span className="bold mr1">{this.props.speaker}</span>
+          <div className="inline" ref="speech">{speechViews}</div>
         </div>
       )
     }

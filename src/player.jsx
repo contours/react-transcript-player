@@ -55,42 +55,22 @@ module.exports = React.createClass(
       this.handleSeekRequest(times.get(index))
     }
   , render: function() {
-      var style = { width: 600 }
-        , searchResults = <SearchResults
+      var searchResults = <SearchResults
             count={this.state.searchResults.get('count')}
             onNavigateResult={this.handleNavigateResult} />
       return (
-      <div style={style}>
-        <style scoped>{`
-.turn { padding: 0.5em;
-        color: rgba(71,91,98,1);
-        transition: color 0.4s ease; }
-.turn:nth-child(odd) { background-color: #f1f1f1; }
-.speaker { margin-right: 0.5em;
-           font-weight: bold; }
-.speech { cursor: pointer;
-          color: rgba(71,91,98,1);
-          transition: color 0.4s ease; }
-.speech:hover { color: rgba(4,32,40,1);
-                background-color: #d0effe;
-                outline: 0.2em solid #d0effe; }
-.speech strong { color: red;
-                 font-weight: normal; }
-.speech.highlighted { text-decoration: underline;
-                      text-decoration-color: #bfbfbf;
-                      -webkit-text-decoration-color: #bfbfbf; }
-.played { color: rgba(71,91,98,0.5); }
-.speech.playing { color: red; }
-`}</style>
+      <div className="container flex flex-column border">
         <AudioPlayer
           media={this.props.transcript.media}
           seekTime={this.state.seekTime}
           onTimeUpdate={this.handleTimeUpdate}
           onEnded={this.handleEnded} />
-        <SearchBox
-          query={this.state.query}
-          onQuery={this.handleQuery} />
-        {this.state.query ? searchResults : ''}
+        <div className="clearfix p1 mb1">
+          <SearchBox
+            query={this.state.query}
+            onQuery={this.handleQuery} />
+          {this.state.query ? searchResults : ''}
+        </div>
         <TranscriptView
           speakers={this.props.transcript.speakers}
           turns={this.props.transcript.turns}

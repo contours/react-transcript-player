@@ -14,14 +14,20 @@ module.exports = React.createClass(
     }
   , render: function() {
       return (
-        <div style={{display: 'inline'}}>
+        <div className="col col-8 flex flex-center">
+          <label htmlFor="search">Search</label>
           <input
+            id="search"
             type="text"
+            className="field flex-auto ml1"
             value={this.props.query}
             onChange={this.handleChange} />
           <button
+            className="btn"
             style={{visibility: this.props.query ? 'visible' : 'hidden'}}
-            onClick={this.handleClearClick}>x</button>
+            onClick={this.handleClearClick}>
+            <i className="fa fa-times-circle fa-lg"></i>
+          </button>
         </div>
       )
     }

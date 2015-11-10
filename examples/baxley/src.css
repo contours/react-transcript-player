@@ -1,0 +1,30 @@
+@import 'basscss';
+@import 'font-awesome';
+
+.turn { 
+  color: rgba(0,0,0,1);
+  transition: color 0.4s ease; 
+}
+
+.speech {
+  cursor: pointer;
+  color: rgba(0,0,0,1);
+  transition: color 0.4s ease;
+}
+
+.speech:hover {
+  color: rgba(0,0,0,1);
+  background-color: var(--aqua);
+}
+
+.speech.playing { 
+  color: var(--blue); 
+}
+
+.played {
+  color: rgba(0,0,0,0.5);
+}
+
+.highlighted {
+  background-color: var(--yellow);
+}
