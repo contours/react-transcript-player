@@ -4,15 +4,23 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "npm link ../..",
-    "serve": "budo index.js:bundle.js --live | garnish",
+    "css": "cssnext src.css style.css",
+    "watch-css": "watchy -s -w src.css -- npm -s run css",
+    "serve": "npm -s run watch-css & budo index.js:bundle.js --live | garnish",
     "dist": "browserify index.js | uglifyjs -cm > dist-bundle.js",
     "go-pages": "git stash && git co gh-pages",
     "publish": "npm -s run dist && npm -s run go-pages && mv -f dist-bundle.js bundle.js && git add bundle.js && git commit --allow-empty -m 'Updated demo bundle.' bundle.js && git push && git co master && STASHED=$(git stash list) ; if (( ${#STASHED} > 0 )) ; then git stash pop ; fi"
   },
   "devDependencies": {
-    "browserify": "^11.2.0",
-    "budo": "^5.1.5",
-    "garnish": "^3.2.1",
-    "uglify-js": "^2.5.0"
+    "browserify": "^12.0.1",
+    "budo": "^6.0.2",
+    "cssnext": "^1.8.4",
+    "garnish": "^4.1.1",
+    "uglify-js": "^2.5.0",
+    "watchy": "^0.6.5"
+  },
+  "dependencies": {
+    "basscss": "^7.0.4",
+    "font-awesome": "^4.4.0"
   }
 }
