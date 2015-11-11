@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 export const progress = (time, start, end) => {
   if (time < start) return ''
