@@ -17,6 +17,11 @@ class TranscriptPlayer extends React.Component {
     }
   constructor(props) {
     super(props)
+    this.handleTimeUpdate = this.handleTimeUpdate.bind(this)
+    this.handleEnded = this.handleEnded.bind(this)
+    this.handleSeekRequest = this.handleSeekRequest.bind(this)
+    this.handleQuery = this.handleQuery.bind(this)
+    this.handleNavigateResult = this.handleNavigateResult.bind(this)
     this.state =
       { time: 0
       , seekTime: null

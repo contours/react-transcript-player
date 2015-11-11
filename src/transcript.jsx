@@ -21,7 +21,8 @@ class TranscriptView extends React.Component {
     }
   constructor(props) {
     super(props)
-    this.handleResize = debounce(this.handleResize, 1000).bind(this)
+    this.handleTurnMounted = this.handleTurnMounted.bind(this)
+    this.handleResize = debounce(this.handleResize, 100).bind(this)
     this.state =
       { startTime: 0
       , endTime: Number.MAX_VALUE
