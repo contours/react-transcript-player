@@ -16,7 +16,7 @@ class TurnView extends React.Component {
     , progress: React.PropTypes.string
     , sentences: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
     , speaker: React.PropTypes.string.isRequired
-    , speech: React.PropTypes.arrayOf(React.propTypes.shape(
+    , speech: React.PropTypes.arrayOf(React.PropTypes.shape(
         { text: React.PropTypes.string
         , start: React.PropTypes.number
         , end: React.PropTypes.number
