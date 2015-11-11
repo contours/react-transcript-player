@@ -1,82 +1,90 @@
 'use strict'
 
-const React = require('react')
-  , ReactDOM = require('react-dom')
-  , PureRenderMixin = require('react-addons-pure-render-mixin')
-  , functify = require('functify')
-  , highlight = require('./highlight')
-  , {progress} = require('./utils')
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Immutable from 'immutable'
+import SpeechView from './transcript-speech'
+import functify from 'functify'
+import {progress} from './utils'
 
-const SpeechView = React.createClass(
-  { mixins: [PureRenderMixin]
-  , handleClick: function() {
-      this.props.onClick(this.props.start)
+class TurnView extends React.Component {
+  static propTypes =
+    { highlights: React.PropTypes.instanceOf(Immutable.List)
+    , index: React.PropTypes.number.isRequired
+    , onMounted: React.PropTypes.func.isRequired
+    , onSpeechClick: React.PropTypes.func.isRequired
+    , progress: React.PropTypes.string
+    , sentences: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+    , speaker: React.PropTypes.string.isRequired
+    , speech: React.PropTypes.arrayOf(React.PropTypes.shape(
+        { text: React.PropTypes.string
+        , start: React.PropTypes.number
+        , end: React.PropTypes.number
+        })).isRequired
+    , time: React.PropTypes.number.isRequired
     }
-  , highlight: function() {
-      return highlight(this.props.text, this.props.highlights)
-        .map(([highlighted, text], index) =>
-             highlighted ? <strong key={index}>{text}</strong>
-                         : <span key={index}>{text}</span>)
+  static defaultProps =
+    { highlights: Immutable.List.of()
+    , progress: ''
     }
-  , render: function() {
-      let className = 'speech ' + this.props.progress
-      if (this.props.highlights.size > 0) className += ' highlighted'
-      return (
-        <span className={className} onClick={this.handleClick}
-        >{this.highlight()}</span>
-      )
-    }
+  constructor(props) {
+    super(props)
   }
-)
-
-module.exports = React.createClass(
-  { componentDidMount() {
-      const root = ReactDOM.findDOMNode(this)
-      var status, end
-      if (root.offsetHeight <= this.props.maxHeight) {
-        status = 'ok'
-        end = this.props.speech.slice(-1)[0].end
-      } else {
-        let nodes = this.refs.speech.getElementsByClassName('speech')
-        let i = nodes.length - 1
-        for (; i >= 0; i--) {
-          nodes.item(i).style.display = 'none'
-          if (root.offsetHeight <= this.props.maxHeight) {
-            break
-          }
-        }
-        if (i > 0) {
-          status = 'truncated'
-          end = this.props.speech[i - 1].end
-        } else {
-          status = 'failed'
+  componentDidMount() {
+    const el = ReactDOM.findDOMNode(this)
+        , p = el.parentNode
+        , bottom = (el) => el.offsetTop + el.offsetHeight
+        , displayable = () => bottom(el) < bottom(p)
+    var status, end
+    if (displayable()) {
+      status = 'ok'
+      end = this.props.speech.slice(-1)[0].end
+    } else {
+      let nodes = this.refs.speech.getElementsByClassName('speech')
+        , i = nodes.length - 1
+      for (; i >= 0; i--) {
+        nodes.item(i).style.display = 'none'
+        if (displayable()) {
+          break
         }
       }
-      this.props.onMounted(status, this.props.index, root.offsetHeight, end)
+      if (i > 0) {
+        status = 'truncated'
+        end = this.props.speech[i - 1].end
+      } else {
+        status = 'failed'
+      }
     }
-
-  , render: function() {
-      const speechViews = functify(this.props.speech)
-        .map(speech => {
-          return (
-            [ <SpeechView
-                start={speech.start}
-                text={speech.text}
-                highlights={this.props.highlights.get(speech.index)}
-                progress={progress(this.props.time, speech.start, speech.end)}
-                onClick={this.props.onSpeechClick} />
-            , ' '
-            ])})
-         .toArray()
-      let className = 'turn ' + this.props.progress + ' p1'
-      className += this.props.index % 2 ? ' bg-white' : ' bg-silver'
-      return (
-        <div className={className} style={{transition: 'color 0.4s ease'}}>
-          <span className="bold mr1">{this.props.speaker}</span>
-          <div className="inline" ref="speech">{speechViews}</div>
-        </div>
-      )
-    }
+    this.props.onMounted(status, this.props.index, end)
   }
-)
-
+  render() {
+    const speechViews = functify(this.props.speech)
+      .map(speech => {
+        return ([
+          <SpeechView
+            highlights={this.props.highlights.get(speech.index)}
+            onClick={this.props.onSpeechClick}
+            progress={progress(this.props.time, speech.start, speech.end)}
+            start={speech.start}
+            text={speech.text}
+          />
+        , ' '
+        ])})
+       .toArray()
+    let className = 'turn ' + this.props.progress + ' p1'
+    className += this.props.index % 2 ? ' bg-white' : ' bg-silver'
+    return (
+      <div
+        className={className}
+        style={{transition: 'color 0.4s ease'}}
+      >
+        <span className="bold mr1">{this.props.speaker}</span>
+        <div
+          className="inline"
+          ref="speech"
+        >{speechViews}</div>
+      </div>
+    )
+  }
+}
+export default TurnView

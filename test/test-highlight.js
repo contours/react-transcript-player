@@ -2,7 +2,7 @@
 
 const test = require('tape')
     , Immutable = require('immutable')
-    , highlight = require('../highlight.js')
+    , highlight = require('../highlight.js').default
 
 test('test highlight', t => {
   const text = 'A man, a plan, Panama!'

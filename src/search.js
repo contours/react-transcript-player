@@ -1,13 +1,13 @@
 'use strict'
 
-const Immutable = require('immutable')
-    , createIntervalTree = require('interval-tree-1d')
+import Immutable from 'immutable'
+import createIntervalTree from 'interval-tree-1d'
 
-const matchesToIntervals = (matches) => {
+export const matchesToIntervals = (matches) => {
   return matches.map(match => [match.index, match.index + match[0].length])
 }
 
-const findSpeechOffsets = (speech) => {
+export const findSpeechOffsets = (speech) => {
   return speech.reduce(([start, offsets], segment) => {
     let end = start + segment.text.length
     offsets.push([start, end])
@@ -15,7 +15,7 @@ const findSpeechOffsets = (speech) => {
   }, [0, []])[1]
 }
 
-const findMatchOffsets = (speech, matches) => {
+export const findMatchOffsets = (speech, matches) => {
   const tree = createIntervalTree(matchesToIntervals(matches))
   return findSpeechOffsets(speech).map(([start, end]) => {
     let highlights = []
@@ -29,7 +29,7 @@ const findMatchOffsets = (speech, matches) => {
   })
 }
 
-const buildMatchIndex = (turns, re) => {
+export const buildMatchIndex = (turns, re) => {
   return Immutable.fromJS(turns.map(turn => {
     const text = turn.sentences.join(' ')
     let match, matches = []
@@ -42,7 +42,7 @@ const buildMatchIndex = (turns, re) => {
   }))
 }
 
-const execute = (turns, re=null) => {
+export const execute = (turns, re=null) => {
   const matches = buildMatchIndex(turns, re)
   let times = Immutable.List()
   for (let [ti, t] of matches.entries()) {
@@ -57,10 +57,3 @@ const execute = (turns, re=null) => {
     }
   )
 }
-
-module.exports =
-  { matchesToIntervals
-  , findSpeechOffsets
-  , findMatchOffsets
-  , buildMatchIndex
-  , execute }

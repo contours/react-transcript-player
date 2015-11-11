@@ -1,86 +1,123 @@
 'use strict'
 
-var React = require('react')
-  , TurnView = require('./transcript-turn')
-  , {enumerate} = require('./itertools')
-  , {progress} = require('./utils')
+import React from 'react'
+import Immutable from 'immutable'
+import TurnView from './transcript-turn'
+import {enumerate} from './itertools'
+import {progress, debounce} from './utils'
 
-module.exports = React.createClass(
-  { handleTurnMounted: function(status, index, height, end) {
-      var nextState = {}
-      switch (status) {
-        case 'ok':
-          nextState.nextTurnIndex = index + 1
-          nextState.availableHeight = this.state.availableHeight - height
-          break
-        case 'truncated':
-          nextState.endTime = end
-          nextState.availableHeight = 0
-          break
-        case 'failed':
-          nextState.endTime = this.props.turns[index - 1].end
-          nextState.nextTurnIndex = index - 1
-          nextState.availableHeight = 0
-          break
-        default:
-          throw `unexpected status ${status}`
-      }
-      this.setState(nextState)
-  }
-  , getDefaultProps: function() {
-      return { maxHeight: Number.MAX_VALUE }
-  }
-  , getInitialState: function() {
-      return { startTime: 0
-             , endTime: Number.MAX_VALUE
-             , nextTurnIndex: 0
-             , availableHeight: this.props.maxHeight }
+class TranscriptView extends React.Component {
+  static propTypes =
+    { ended: React.PropTypes.bool
+    , highlights: React.PropTypes.instanceOf(Immutable.List)
+    , onSeekRequest: React.PropTypes.func.isRequired
+    , speakers: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+    , time: React.PropTypes.number.isRequired
+    , turns: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
     }
-  , componentWillReceiveProps: function(nextProps) {
-      if (nextProps.time > this.state.endTime ||
-          nextProps.time < this.state.startTime) {
+  static defaultProps =
+    { ended: false
+    , highlights: Immutable.List.of()
+    }
+  constructor(props) {
+    super(props)
+    this.handleTurnMounted = this.handleTurnMounted.bind(this)
+    this.handleResize = debounce(this.handleResize, 100).bind(this)
+    this.state =
+      { startTime: 0
+      , endTime: Number.MAX_VALUE
+      , nextTurnIndex: 0
+      , windowHeight: window.innerHeight }
+  }
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize, false)
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.time > this.state.endTime ||
+        nextProps.time < this.state.startTime) {
 
-        let nextTurnIndex = 0
-        for (; nextTurnIndex < nextProps.turns.length - 1; nextTurnIndex++) {
-          if (nextProps.turns[nextTurnIndex].end > nextProps.time) {
-            break
-          }
-	}
-        this.setState(
-          { startTime: nextProps.time
-          , endTime: Number.MAX_VALUE
-          , nextTurnIndex: nextTurnIndex
-          , availableHeight: this.props.maxHeight
-          })
-      }
+      this.setState(
+        { startTime: nextProps.time
+        , endTime: Number.MAX_VALUE
+        , nextTurnIndex: this.findNextTurnIndex(nextProps.turns, nextProps.time)
+        })
     }
-  , createTurnView: function(index, turn) {
-      const speech = enumerate(turn.speech)
-              .map(([i, s]) => { s.index = i; return s })
-              .skipWhile(s => s.end < this.state.startTime)
-              .takeUntil(s => s.start > this.state.endTime)
-              .toArray()
-      return <TurnView
-        key={`turn-${index}.${this.state.startTime}`}
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize)
+  }
+  findNextTurnIndex(turns, time) {
+    for (let i = 0; i < turns.length; i++) {
+      if (turns[i].end > time) return i
+    }
+    return 0
+  }
+  handleResize() {
+    this.setState(
+      { windowHeight: window.innerHeight
+      , endTime: Number.MAX_VALUE
+      , nextTurnIndex: this.findNextTurnIndex(this.props.turns, this.props.time)
+      })
+  }
+  handleTurnMounted(status, index, end) {
+    var nextState = {}
+    switch (status) {
+      case 'ok':
+        nextState.nextTurnIndex = index + 1
+        break
+      case 'truncated':
+        nextState.endTime = end
+        break
+      case 'failed':
+        nextState.endTime = this.props.turns[index - 1].end
+        nextState.nextTurnIndex = index - 1
+        break
+      default:
+        throw `unexpected status ${status}`
+    }
+    if (this.props.time > nextState.endTime) {
+      nextState =
+        { startTime: this.props.time
+        , endTime: Number.MAX_VALUE
+        , nextTurnIndex: this.findNextTurnIndex(
+            this.props.turns, this.props.time)
+        }
+    }
+    this.setState(nextState)
+  }
+  createTurnView(index, turn) {
+    const speech = enumerate(turn.speech)
+      .map(([i, s]) => { s.index = i; return s })
+      .skipWhile(s => s.end < this.state.startTime)
+      .takeUntil(s => s.start > this.state.endTime)
+      .toArray()
+    return (
+      <TurnView
+        highlights={this.props.highlights.get(index)}
         index={index}
-        maxHeight={this.state.availableHeight}
+        key={`turn-${index}.${this.state.startTime}`}
+        onMounted={this.handleTurnMounted}
+        onSpeechClick={this.props.onSeekRequest}
+        progress={progress(this.props.time, turn.start, turn.end)}
+        sentences={turn.sentences}
         speaker={this.props.speakers[turn.speaker]}
         speech={speech}
-        sentences={turn.sentences}
-        highlights={this.props.highlights.get(index)}
         time={this.props.time}
-        progress={progress(this.props.time, turn.start, turn.end)}
-        onMounted={this.handleTurnMounted}
-        onSpeechClick={this.props.onSeekRequest} />
-    }
-  , render: function() {
-      const turnViews = enumerate(this.props.turns)
-        .skipWhile(([, turn]) => turn.end < this.state.startTime)
-        .takeUntil(([index, ]) => index > this.state.nextTurnIndex)
-        .map(([index, turn]) => this.createTurnView(index, turn))
-        .toArray()
-      return <div className="flex-auto">{turnViews}</div>
-    }
+      />
+    )
   }
-)
-
+  render() {
+    const turnViews = enumerate(this.props.turns)
+      .skipWhile(([, turn]) => turn.end < this.state.startTime)
+      .takeUntil(([index, ]) => index > this.state.nextTurnIndex)
+      .map(([index, turn]) => this.createTurnView(index, turn))
+      .toArray()
+    return (
+      <div
+        className="flex-auto"
+        key={this.state.windowHeight}
+      >{turnViews}</div>
+    )
+  }
+}
+export default TranscriptView

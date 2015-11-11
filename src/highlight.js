@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = (text, ranges) => {
+const highlight = (text, ranges) => {
   ranges = ranges
     .filter(range => range.get(0) !== range.get(1))
     .sort((a, b) => a.get(0) - b.get(0))
@@ -26,4 +26,4 @@ module.exports = (text, ranges) => {
     return parts
   }).reduce((a, b) => a.concat(b), [])
 }
-
+export default highlight

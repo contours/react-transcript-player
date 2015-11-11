@@ -2,7 +2,7 @@
 
 var React = require('react')
   , ReactDOM = require('react-dom')
-  , TranscriptPlayer = require('react-transcript-player')
+  , TranscriptPlayer = require('react-transcript-player').default
   , transcript = require('./media/transcript.json')
 
 ReactDOM.render(
