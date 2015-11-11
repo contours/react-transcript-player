@@ -27,7 +27,7 @@ module.exports = React.createClass(
       return (
         <div>
           <audio ref="audio" controls
-                 style={{width: 600}}
+                 style={{width: '100%'}}
                  src={this.props.media}
                  onTimeUpdate={this.handleTimeUpdate}
                  onPlaying={this.handlePlaying}

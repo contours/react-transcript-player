@@ -79,7 +79,7 @@ module.exports = React.createClass(
         .takeUntil(([index, ]) => index > this.state.nextTurnIndex)
         .map(([index, turn]) => this.createTurnView(index, turn))
         .toArray()
-      return <div style={{marginTop: '2px'}}>{turnViews}</div>
+      return <div className="flex-auto">{turnViews}</div>
     }
   }
 )
