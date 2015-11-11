@@ -1,13 +1,13 @@
 'use strict'
 
-const React = require('react')
+import React from 'react'
 
 class AudioPlayer extends React.Component {
   static propTypes =
     { media: React.PropTypes.string.isRequired
     , onEnded: React.PropTypes.func.isRequired
     , onTimeUpdate: React.PropTypes.func.isRequired
-    , seekTime: React.PropTypes.number.isRequired
+    , seekTime: React.PropTypes.number
     }
   constructor(props) {
     super(props)
