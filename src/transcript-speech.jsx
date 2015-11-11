@@ -1,8 +1,8 @@
 'use strict'
 
-const React = require('react')
-    , Immutable = require('immutable')
-    , highlight = require('./highlight')
+import React from 'react'
+import Immutable from 'immutable'
+import highlight from './highlight'
 
 class SpeechView extends React.Component {
   static propTypes =

@@ -1,11 +1,11 @@
 'use strict'
 
-const React = require('react')
-    , AudioPlayer = require('./audio')
-    , SearchBox = require('./searchbox')
-    , SearchResults = require('./searchresults')
-    , TranscriptView = require('./transcript')
-    , search = require('./search')
+import React from 'react'
+import AudioPlayer from './audio'
+import SearchBox from './searchbox'
+import SearchResults from './searchresults'
+import TranscriptView from './transcript'
+import * as search from './search'
 
 class TranscriptPlayer extends React.Component {
   static propTypes =

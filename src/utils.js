@@ -1,13 +1,13 @@
 "use strict"
 
-const progress = (time, start, end) => {
+export const progress = (time, start, end) => {
   if (time < start) return ''
   if (time > end + 500) return 'played'
   return 'playing'
 }
 
 // taken from underscore.js
-const debounce = (func, wait, immediate) => {
+export const debounce = (func, wait, immediate) => {
   var timeout, args, context, timestamp, result
 
   var later = function() {
@@ -37,5 +37,3 @@ const debounce = (func, wait, immediate) => {
     return result
   }
 }
-
-module.exports = {progress: progress, debounce: debounce}

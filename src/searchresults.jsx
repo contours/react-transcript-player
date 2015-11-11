@@ -1,6 +1,6 @@
 'use strict'
 
-var React = require('react')
+import React from 'react'
 
 class SearchResults extends React.Component {
   static propTypes =

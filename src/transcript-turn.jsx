@@ -1,11 +1,11 @@
 'use strict'
 
-const React = require('react')
-    , ReactDOM = require('react-dom')
-    , Immutable = require('immutable')
-    , SpeechView = require('./transcript-speech')
-    , functify = require('functify')
-    , {progress} = require('./utils')
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Immutable from 'immutable'
+import SpeechView from './transcript-speech'
+import functify from 'functify'
+import {progress} from './utils'
 
 class TurnView extends React.Component {
   static propTypes =

@@ -1,10 +1,10 @@
 'use strict'
 
-const React = require('react')
-    , Immutable = require('immutable')
-    , TurnView = require('./transcript-turn')
-    , {enumerate} = require('./itertools')
-    , {progress, debounce} = require('./utils')
+import React from 'react'
+import Immutable from 'immutable'
+import TurnView from './transcript-turn'
+import {enumerate} from './itertools'
+import {progress, debounce} from './utils'
 
 class TranscriptView extends React.Component {
   static propTypes =
