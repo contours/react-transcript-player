@@ -36,24 +36,28 @@ class TranscriptView extends React.Component {
     if (nextProps.time > this.state.endTime ||
         nextProps.time < this.state.startTime) {
 
-      let nextTurnIndex = 0
-      for (; nextTurnIndex < nextProps.turns.length - 1; nextTurnIndex++) {
-        if (nextProps.turns[nextTurnIndex].end > nextProps.time) {
-          break
-        }
-      }
       this.setState(
         { startTime: nextProps.time
         , endTime: Number.MAX_VALUE
-        , nextTurnIndex: nextTurnIndex
+        , nextTurnIndex: this.findNextTurnIndex(nextProps.turns, nextProps.time)
         })
     }
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize)
   }
+  findNextTurnIndex(turns, time) {
+    for (let i = 0; i < turns.length; i++) {
+      if (turns[i].end > time) return i
+    }
+    return 0
+  }
   handleResize() {
-    this.setState({windowHeight: window.innerHeight})
+    this.setState(
+      { windowHeight: window.innerHeight
+      , endTime: Number.MAX_VALUE
+      , nextTurnIndex: this.findNextTurnIndex(this.props.turns, this.props.time)
+      })
   }
   handleTurnMounted(status, index, end) {
     var nextState = {}
@@ -70,6 +74,14 @@ class TranscriptView extends React.Component {
         break
       default:
         throw `unexpected status ${status}`
+    }
+    if (this.props.time > nextState.endTime) {
+      nextState =
+        { startTime: this.props.time
+        , endTime: Number.MAX_VALUE
+        , nextTurnIndex: this.findNextTurnIndex(
+            this.props.turns, this.props.time)
+        }
     }
     this.setState(nextState)
   }
