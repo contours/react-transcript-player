@@ -7,5 +7,5 @@ var React = require('react')
 
 ReactDOM.render(
   React.createElement(
-    TranscriptPlayer, {transcript: transcript, maxHeight: 600}),
+    TranscriptPlayer, {transcript: transcript}),
   document.getElementById('mount'))
