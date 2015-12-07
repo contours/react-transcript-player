@@ -20,6 +20,14 @@ class SpeechView extends React.Component {
     super(props)
     this.handleClick = this.handleClick.bind(this)
   }
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.highlights.equals(this.props.highlights) &&
+        nextProps.progress === this.props.progress) {
+      return false
+    } else {
+      return true
+    }
+  }
   handleClick() {
     this.props.onClick(this.props.start)
   }
