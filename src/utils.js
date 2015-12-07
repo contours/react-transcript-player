@@ -2,7 +2,7 @@
 
 export const progress = (time, start, end) => {
   if (time < start) return ''
-  if (time > end + 500) return 'played'
+  if (time > end) return 'played'
   return 'playing'
 }
 

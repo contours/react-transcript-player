@@ -21,8 +21,7 @@ class AudioPlayer extends React.Component {
     }
   }
   handleTimeUpdate() {
-    this.props.onTimeUpdate(
-      parseInt(this.refs.audio.currentTime * 1000))
+    this.props.onTimeUpdate(this.refs.audio.currentTime)
   }
   handlePlaying() {
     this.props.onEnded(false)
@@ -32,7 +31,7 @@ class AudioPlayer extends React.Component {
   }
   seek() {
     if (this.props.seekTime !== null) {
-      this.refs.audio.currentTime = this.props.seekTime / 1000
+      this.refs.audio.currentTime = this.props.seekTime
     }
   }
   render() {
