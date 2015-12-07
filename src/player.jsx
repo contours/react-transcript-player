@@ -31,9 +31,9 @@ class TranscriptPlayer extends React.Component {
       , resultIndex: null
       }
     }
-  handleTimeUpdate(time) {
-    if (this.state.seekTime !== null
-        && Math.abs(time - this.state.seekTime) < 10) {
+  handleTimeUpdate(unrounded_time) {
+    const time = Math.round(unrounded_time)
+    if (time === this.state.seekTime) {
       this.setState({time: time, seekTime: null})
     } else {
       this.setState({time: time})
