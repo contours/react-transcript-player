@@ -1,0 +1,36 @@
+@import 'basscss';
+@import 'font-awesome';
+
+:root {
+  /* specify alpha so we can transition on it */
+  --blue: rgba(0,116,217,1);
+}
+
+.turn { 
+  color: rgba(0,0,0,1);
+  transition: color 1s ease;
+}
+
+.speech {
+  cursor: pointer;
+  color: rgba(0,0,0,1);
+  transition: color 1s ease;
+}
+
+.speech:hover {
+  color: rgba(0,0,0,1);
+  background-color: var(--aqua);
+}
+
+.speech.playing { 
+  color: var(--blue);
+}
+
+.played {
+  color: rgba(0,0,0,0.5);
+  transition: color 5s ease;
+}
+
+.highlighted {
+  background-color: var(--yellow);
+}
