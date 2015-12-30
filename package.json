@@ -27,7 +27,9 @@
     "watchy": "^0.6.5"
   },
   "browserify": {
-    "transform": [["babelify"]]
+    "transform": [
+      "babelify"
+    ]
   },
   "scripts": {
     "lint": "eslint --ext .jsx src",
@@ -39,6 +41,7 @@
   },
   "dependencies": {
     "babel-runtime": "^6.0.14",
+    "babelify": "^7.2.0",
     "functify": "^0.3.0",
     "immutable": "^3.7.5",
     "interval-tree-1d": "^1.0.3"
