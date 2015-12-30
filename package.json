@@ -26,6 +26,9 @@
     "tape": "^4.2.2",
     "watchy": "^0.6.5"
   },
+  "browserify": {
+    "transform": [["babelify"]]
+  },
   "scripts": {
     "lint": "eslint --ext .jsx src",
     "transpile": "babel src -d lib --source-maps inline",
