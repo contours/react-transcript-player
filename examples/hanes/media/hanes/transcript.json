@@ -1,4 +1,6 @@
 {
+    "id": "U-0080",
+    "label": "Hanes, Arthur, Jr., 27 May 2003",
     "turns": [
         {
             "sentences": [
@@ -18288,5 +18290,5 @@
         "Willoughby Anderson",
         "Arthur Hanes, Jr."
     ],
-    "media": "media/audio.mp3"
+    "media": "/media/hanes/audio.mp3"
 }

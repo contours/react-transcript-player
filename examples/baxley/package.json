@@ -3,7 +3,6 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "postinstall": "npm link ../..",
     "css": "cssnext src.css style.css",
     "watch-css": "watchy -s -w src.css -- npm -s run css",
     "serve": "npm -s run watch-css & budo index.js:bundle.js --live | garnish",
@@ -21,6 +20,9 @@
   },
   "dependencies": {
     "basscss": "^7.0.4",
-    "font-awesome": "^4.4.0"
+    "font-awesome": "^4.4.0",
+    "react": "^0.14.5",
+    "react-dom": "^0.14.5",
+    "react-transcript-player": "^1.0.3"
   }
 }

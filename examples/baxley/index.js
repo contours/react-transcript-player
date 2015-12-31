@@ -3,7 +3,7 @@
 var React = require('react')
   , ReactDOM = require('react-dom')
   , TranscriptPlayer = require('react-transcript-player').default
-  , transcript = require('./media/transcript.json')
+  , transcript = require('./media/baxley/transcript.json')
 
 ReactDOM.render(
   React.createElement(TranscriptPlayer, {transcript: transcript}),

@@ -1,9 +1,11 @@
 {
+    "id": "U-0078",
+    "label": "Baxley, Bill, 22 May 2003",
     "speakers": [
         "Willoughby Anderson",
         "Bill Baxley"
     ],
-    "media": "media/audio.mp3",
+    "media": "/media/baxley/audio.mp3",
     "turns": [
         {
             "speaker": 0,
