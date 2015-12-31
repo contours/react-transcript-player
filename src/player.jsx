@@ -10,7 +10,8 @@ import * as search from './search'
 class TranscriptPlayer extends React.Component {
   static propTypes =
     { transcript: React.PropTypes.shape(
-        { media: React.PropTypes.string
+        { id: React.PropTypes.string
+        , media: React.PropTypes.string
         , speakers: React.PropTypes.arrayOf(React.PropTypes.string)
         , turns: React.PropTypes.arrayOf(React.PropTypes.object)
         }).isRequired
@@ -89,6 +90,7 @@ class TranscriptPlayer extends React.Component {
         <TranscriptView
           ended={this.state.ended}
           highlights={this.state.searchResults.get('matches')}
+          key={this.props.transcript.id}
           onSeekRequest={this.handleSeekRequest}
           speakers={this.props.transcript.speakers}
           time={this.state.time}
