@@ -6,8 +6,8 @@ class SearchBox extends React.Component {
   static propTypes =
     { onQuery: React.PropTypes.func.isRequired
     , query: React.PropTypes.string
-    }
-  static defaultProps = { query: '' }
+    };
+  static defaultProps = { query: '' };
   constructor(props) {
     super(props)
     this.handleChange = this.handleChange.bind(this)

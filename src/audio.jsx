@@ -8,7 +8,7 @@ class AudioPlayer extends React.Component {
     , onEnded: React.PropTypes.func.isRequired
     , onTimeUpdate: React.PropTypes.func.isRequired
     , seekTime: React.PropTypes.number
-    }
+    };
   constructor(props) {
     super(props)
     this.handleTimeUpdate = this.handleTimeUpdate.bind(this)

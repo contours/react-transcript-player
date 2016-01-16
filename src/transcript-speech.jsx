@@ -11,11 +11,11 @@ class SpeechView extends React.Component {
     , progress: React.PropTypes.string
     , start: React.PropTypes.number.isRequired
     , text: React.PropTypes.string.isRequired
-    }
+    };
   static defaultProps =
     { highlights: Immutable.List.of()
     , progress: ''
-    }
+    };
   constructor(props) {
     super(props)
     this.handleClick = this.handleClick.bind(this)

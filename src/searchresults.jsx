@@ -6,7 +6,7 @@ class SearchResults extends React.Component {
   static propTypes =
     { count: React.PropTypes.number.isRequired
     , onNavigateResult: React.PropTypes.func.isRequired
-    }
+    };
   constructor(props) {
     super(props)
     this.handleBackwardClick = this.handleBackwardClick.bind(this)

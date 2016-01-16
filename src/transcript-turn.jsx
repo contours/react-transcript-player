@@ -22,11 +22,11 @@ class TurnView extends React.Component {
         , end: React.PropTypes.number
         })).isRequired
     , time: React.PropTypes.number.isRequired
-    }
+    };
   static defaultProps =
     { highlights: Immutable.List.of()
     , progress: ''
-    }
+    };
   constructor(props) {
     super(props)
   }

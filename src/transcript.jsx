@@ -14,11 +14,11 @@ class TranscriptView extends React.Component {
     , speakers: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
     , time: React.PropTypes.number.isRequired
     , turns: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
-    }
+    };
   static defaultProps =
     { ended: false
     , highlights: Immutable.List.of()
-    }
+    };
   constructor(props) {
     super(props)
     this.handleTurnMounted = this.handleTurnMounted.bind(this)
