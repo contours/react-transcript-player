@@ -3,7 +3,7 @@
 import React from 'react'
 import Immutable from 'immutable'
 import TurnView from './transcript-turn'
-import {enumerate} from './itertools'
+import functify from './functify'
 import {progress, debounce} from './utils'
 
 class TranscriptView extends React.Component {
@@ -86,7 +86,8 @@ class TranscriptView extends React.Component {
     this.setState(nextState)
   }
   createTurnView(index, turn) {
-    const speech = enumerate(turn.speech)
+    const speech = functify(turn.speech)
+      .enumerate()
       .map(([i, s]) => { s.index = i; return s })
       .skipWhile(s => s.end < this.state.startTime)
       .takeUntil(s => s.start > this.state.endTime)
@@ -107,7 +108,8 @@ class TranscriptView extends React.Component {
     )
   }
   render() {
-    const turnViews = enumerate(this.props.turns)
+    const turnViews = functify(this.props.turns)
+      .enumerate()
       .skipWhile(([, turn]) => turn.end < this.state.startTime)
       .takeUntil(([index, ]) => index > this.state.nextTurnIndex)
       .map(([index, turn]) => this.createTurnView(index, turn))

@@ -4,7 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Immutable from 'immutable'
 import SpeechView from './transcript-speech'
-import functify from 'functify'
+import functify from './functify'
 import {progress} from './utils'
 
 class TurnView extends React.Component {

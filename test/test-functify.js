@@ -1,7 +1,7 @@
 'use strict'
 
 var test = require('tape')
-  , {range, enumerate} = require('../itertools.js')
+  , functify = require('../functify.js').default
 
 test('test range()', t => {
   const expected = []
@@ -10,7 +10,7 @@ test('test range()', t => {
   for (let i = 0; i < 7; i++) {
     expected.push(i)
   }
-  for (let actual of range()) {
+  for (let actual of functify.range()) {
     if (index === expected.length) break
     t.equal(actual, expected[index++])
   }
@@ -23,7 +23,7 @@ test('test range(3)', t => {
   for (let i = 3; i < 10; i++) {
     expected.push(i)
   }
-  for (let actual of range(3)) {
+  for (let actual of functify.range(3)) {
     if (index === expected.length) break
     t.equal(actual, expected[index++])
   }
@@ -36,7 +36,7 @@ test('test range(3, 10)', t => {
   for (let i = 3; i < 10; i++) {
     expected.push(i)
   }
-  for (let actual of range(3, 10)) {
+  for (let actual of functify.range(3, 10)) {
     t.equal(actual, expected[index++])
   }
 })
@@ -48,7 +48,7 @@ test('test range(3, 10, 2)', t => {
   for (let i = 3; i < 10; i += 2) {
     expected.push(i)
   }
-  for (let actual of range(3, 10, 2)) {
+  for (let actual of functify.range(3, 10, 2)) {
     t.equal(actual, expected[index++])
   }
 })
@@ -60,7 +60,7 @@ test('test range(3, undefined, -2)', t => {
   for (let i = 3; i > -4; i -= 2) {
     expected.push(i)
   }
-  for (let actual of range(3, undefined, -2)) {
+  for (let actual of functify.range(3, undefined, -2)) {
     if (index === expected.length) break
     t.equal(actual, expected[index++])
   }
@@ -68,7 +68,7 @@ test('test range(3, undefined, -2)', t => {
 
 test('test range(3, 10, -2)', t => {
   t.plan(1)
-  t.deepEqual(range(3, 10, -2).toArray(), [])
+  t.deepEqual(functify.range(3, 10, -2).toArray(), [])
 })
 
 test('test range(-3)', t => {
@@ -78,7 +78,7 @@ test('test range(-3)', t => {
   for (let i = -3; i < 4; i++) {
     expected.push(i)
   }
-  for (let actual of range(-3)) {
+  for (let actual of functify.range(-3)) {
     if (index === expected.length) break
     t.equal(actual, expected[index++])
   }
@@ -88,7 +88,7 @@ test('test range(1, 2, 0)', t => {
   const expected = [1, 1, 1, 1, 1]
   var index = 0
   t.plan(5)
-  for (let actual of range(1, 2, 0)) {
+  for (let actual of functify.range(1, 2, 0)) {
     if (index === expected.length) break
     t.equal(actual, expected[index++])
   }
@@ -97,5 +97,5 @@ test('test range(1, 2, 0)', t => {
 test('test enumerate()', t => {
   const expected = [[0, 'a'], [1, 'b'], [2, 'c']]
   t.plan(1)
-  t.deepEqual(enumerate(['a', 'b', 'c']).toArray(), expected)
+  t.deepEqual(functify(['a', 'b', 'c']).enumerate().toArray(), expected)
 })

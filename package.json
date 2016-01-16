@@ -35,12 +35,11 @@
     "prepublish": "babel src -d lib"
   },
   "dependencies": {
-    "babel-runtime": "^6.0.14",
-    "functify": "^0.3.0",
     "immutable": "^3.7.5",
     "interval-tree-1d": "^1.0.3"
   },
   "peerDependencies": {
+    "babel-runtime": "^6.0.14",
     "react": "^0.14.5",
     "react-dom": "^0.14.5"
   }
