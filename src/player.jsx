@@ -73,7 +73,7 @@ class TranscriptPlayer extends React.Component {
       />
     )
     return (
-      <div className="container flex flex-column">
+      <div className="flex flex-column">
         <AudioPlayer
           media={this.props.transcript.media}
           onEnded={this.handleEnded}
