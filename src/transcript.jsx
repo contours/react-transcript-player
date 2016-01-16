@@ -27,7 +27,7 @@ class TranscriptView extends React.Component {
       { startTime: 0
       , endTime: Number.MAX_VALUE
       , nextTurnIndex: 0
-      , windowHeight: window.innerHeight }
+      , windowDimensions: `${window.innerHeight}x${window.innerWidth}` }
   }
   componentDidMount() {
     window.addEventListener('resize', this.handleResize, false)
@@ -54,7 +54,7 @@ class TranscriptView extends React.Component {
   }
   handleResize() {
     this.setState(
-      { windowHeight: window.innerHeight
+      { windowDimensions: `${window.innerHeight}x${window.innerWidth}`
       , endTime: Number.MAX_VALUE
       , nextTurnIndex: this.findNextTurnIndex(this.props.turns, this.props.time)
       })
@@ -117,7 +117,7 @@ class TranscriptView extends React.Component {
     return (
       <div
         className="flex-auto"
-        key={this.state.windowHeight}
+        key={this.state.windowDimensions}
       >{turnViews}</div>
     )
   }
