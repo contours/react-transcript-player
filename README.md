@@ -1,15 +1,9 @@
-See a [demo](http://contours.github.io/react-transcript-player/examples/logic/).
+To run an example locally:
 
-To develop:
+    cd examples/baxley
+    npm install
+    npm run serve
+    open http://localhost:9966/
 
-1. `npm run build-watch` for live transpilation of the component.
-
-2. In another terminal, run one of the examples:
-
-        cd examples/logic
-        npm install
-        npm run serve
-        open http://localhost:9966/
-
-3. Now you can edit the files in `src` (or `examples/logic`) and
-   changes will be reflected immediately in your browser.
+Now you can edit the files `examples/baxley` and
+changes will be reflected immediately in your browser.
