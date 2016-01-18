@@ -9,13 +9,16 @@ import * as search from './search'
 
 class TranscriptPlayer extends React.Component {
   static propTypes =
-    { transcript: React.PropTypes.shape(
+    { onTimeUpdate: React.PropTypes.func
+    , seekTime: React.PropTypes.number
+    , transcript: React.PropTypes.shape(
         { id: React.PropTypes.string
         , media: React.PropTypes.string
         , speakers: React.PropTypes.arrayOf(React.PropTypes.string)
         , turns: React.PropTypes.arrayOf(React.PropTypes.object)
         }).isRequired
     };
+  static defaultProps = {seekTime: null};
   constructor(props) {
     super(props)
     this.handleTimeUpdate = this.handleTimeUpdate.bind(this)
@@ -25,15 +28,21 @@ class TranscriptPlayer extends React.Component {
     this.handleNavigateResult = this.handleNavigateResult.bind(this)
     this.state =
       { time: 0
-      , seekTime: null
+      , seekTime: props.seekTime
       , ended: false
       , query: ''
       , searchResults: search.execute(props.transcript.turns)
       , resultIndex: null
       }
-    }
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({seekTime: nextProps.seekTime})
+  }
   handleTimeUpdate(unrounded_time) {
     const time = Math.round(unrounded_time)
+    if (this.props.onTimeUpdate && time !== this.state.time) {
+      this.props.onTimeUpdate(time)
+    }
     if (time === this.state.seekTime) {
       this.setState({time: time, seekTime: null})
     } else {

@@ -9,8 +9,10 @@ class AudioPlayer extends React.Component {
     , onTimeUpdate: React.PropTypes.func.isRequired
     , seekTime: React.PropTypes.number
     };
+  static defaultProps = {seekTime: null};
   constructor(props) {
     super(props)
+    this.handleCanPlay = this.handleCanPlay.bind(this)
     this.handleTimeUpdate = this.handleTimeUpdate.bind(this)
     this.handlePlaying = this.handlePlaying.bind(this)
     this.handleEnded = this.handleEnded.bind(this)
@@ -19,6 +21,9 @@ class AudioPlayer extends React.Component {
     if (this.props.seekTime !== prevProps.seekTime) {
       this.seek()
     }
+  }
+  handleCanPlay() {
+    this.seek()
   }
   handleTimeUpdate() {
     this.props.onTimeUpdate(this.refs.audio.currentTime)
@@ -39,6 +44,7 @@ class AudioPlayer extends React.Component {
       <div>
         <audio
           controls
+          onCanPlay={this.handleCanPlay}
           onEnded={this.handleEnded}
           onPlaying={this.handlePlaying}
           onTimeUpdate={this.handleTimeUpdate}
