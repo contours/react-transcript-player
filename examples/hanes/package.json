@@ -12,17 +12,18 @@
   },
   "devDependencies": {
     "browserify": "^12.0.1",
-    "budo": "^6.0.2",
+    "budo": "^8.0.0",
     "cssnext": "^1.8.4",
     "garnish": "^4.1.1",
     "uglify-js": "^2.5.0",
     "watchy": "^0.6.5"
   },
   "dependencies": {
+    "babel-runtime": "^6.3.19",
     "basscss": "^7.0.4",
     "font-awesome": "^4.4.0",
     "react": "^0.14.5",
     "react-dom": "^0.14.5",
-    "react-transcript-player": "^1.0.3"
+    "react-transcript-player": "^1.1.0"
   }
 }
