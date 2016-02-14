@@ -9,7 +9,10 @@ import * as search from './search'
 
 class TranscriptPlayer extends React.Component {
   static propTypes =
-    { onTimeUpdate: React.PropTypes.func
+    { onPause: React.PropTypes.func
+    , onPlaying: React.PropTypes.func
+    , onTimeUpdate: React.PropTypes.func
+    , play: React.PropTypes.bool
     , seekTime: React.PropTypes.number
     , transcript: React.PropTypes.shape(
         { id: React.PropTypes.string
@@ -18,11 +21,13 @@ class TranscriptPlayer extends React.Component {
         , turns: React.PropTypes.arrayOf(React.PropTypes.object)
         }).isRequired
     };
-  static defaultProps = {seekTime: null};
+  static defaultProps = {play: false, seekTime: null};
   constructor(props) {
     super(props)
     this.handleTimeUpdate = this.handleTimeUpdate.bind(this)
     this.handleEnded = this.handleEnded.bind(this)
+    this.handlePause = this.handlePause.bind(this)
+    this.handlePlaying = this.handlePlaying.bind(this)
     this.handleSeekRequest = this.handleSeekRequest.bind(this)
     this.handleQuery = this.handleQuery.bind(this)
     this.handleNavigateResult = this.handleNavigateResult.bind(this)
@@ -51,6 +56,12 @@ class TranscriptPlayer extends React.Component {
   }
   handleEnded(ended) {
     this.setState({ended: ended})
+  }
+  handlePause() {
+    if (this.props.onPause) this.props.onPause()
+  }
+  handlePlaying() {
+    if (this.props.onPlaying) this.props.onPlaying()
   }
   handleSeekRequest(seekTime) {
     this.setState({seekTime: seekTime, ended: false})
@@ -86,7 +97,10 @@ class TranscriptPlayer extends React.Component {
         <AudioPlayer
           media={this.props.transcript.media}
           onEnded={this.handleEnded}
+          onPause={this.handlePause}
+          onPlaying={this.handlePlaying}
           onTimeUpdate={this.handleTimeUpdate}
+          play={this.props.play}
           seekTime={this.state.seekTime}
         />
         <div className="clearfix p1 mb1">
