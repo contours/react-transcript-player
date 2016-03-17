@@ -34,6 +34,7 @@ class TranscriptPlayer extends React.Component {
     this.state =
       { time: 0
       , seekTime: props.seekTime
+      , playing: false
       , ended: false
       , query: ''
       , searchResults: search.execute(props.transcript.turns)
@@ -61,6 +62,7 @@ class TranscriptPlayer extends React.Component {
     if (this.props.onPause) this.props.onPause()
   }
   handlePlaying() {
+    this.setState({playing: true})
     if (this.props.onPlaying) this.props.onPlaying()
   }
   handleSeekRequest(seekTime) {
@@ -100,7 +102,7 @@ class TranscriptPlayer extends React.Component {
           onPause={this.handlePause}
           onPlaying={this.handlePlaying}
           onTimeUpdate={this.handleTimeUpdate}
-          play={this.props.play}
+          play={this.state.playing}
           seekTime={this.state.seekTime}
         />
         <div className="clearfix p1 mb1">
