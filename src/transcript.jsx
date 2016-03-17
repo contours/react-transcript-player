@@ -1,7 +1,7 @@
 'use strict'
 
 import React from 'react'
-import Immutable from 'immutable'
+import {Map, List} from 'immutable'
 import TurnView from './transcript-turn'
 import functify from './functify'
 import {progress, debounce} from './utils'
@@ -9,7 +9,7 @@ import {progress, debounce} from './utils'
 class TranscriptView extends React.Component {
   static propTypes =
     { ended: React.PropTypes.bool
-    , highlights: React.PropTypes.instanceOf(Immutable.List)
+    , highlights: React.PropTypes.instanceOf(Map)
     , onSeekRequest: React.PropTypes.func.isRequired
     , speakers: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
     , time: React.PropTypes.number.isRequired
@@ -17,7 +17,7 @@ class TranscriptView extends React.Component {
     };
   static defaultProps =
     { ended: false
-    , highlights: Immutable.List.of()
+    , highlights: Map()
     };
   constructor(props) {
     super(props)
@@ -94,7 +94,7 @@ class TranscriptView extends React.Component {
       .toArray()
     return (
       <TurnView
-        highlights={this.props.highlights.get(index)}
+        highlights={this.props.highlights.get(index, List())}
         index={index}
         key={`turn-${index}.${this.state.startTime}`}
         onMounted={this.handleTurnMounted}

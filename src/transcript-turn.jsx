@@ -2,14 +2,14 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Immutable from 'immutable'
+import {Map, List} from 'immutable'
 import SpeechView from './transcript-speech'
 import functify from './functify'
 import {progress} from './utils'
 
 class TurnView extends React.Component {
   static propTypes =
-    { highlights: React.PropTypes.instanceOf(Immutable.List)
+    { highlights: React.PropTypes.instanceOf(List)
     , index: React.PropTypes.number.isRequired
     , onMounted: React.PropTypes.func.isRequired
     , onSpeechClick: React.PropTypes.func.isRequired
@@ -24,7 +24,7 @@ class TurnView extends React.Component {
     , time: React.PropTypes.number.isRequired
     };
   static defaultProps =
-    { highlights: Immutable.List.of()
+    { highlights: List()
     , progress: ''
     };
   constructor(props) {
@@ -58,11 +58,18 @@ class TurnView extends React.Component {
     this.props.onMounted(status, this.props.index, end)
   }
   render() {
+    let highlights = this.props.highlights.reduce((highlights, match) => {
+      match.entrySeq().forEach(([speech_idx, range]) => {
+        highlights = highlights.update(
+          speech_idx, List(), ranges => ranges.push(range))
+      })
+      return highlights
+    }, Map())
     const speechViews = functify(this.props.speech)
       .map(speech => {
         return ([
           <SpeechView
-            highlights={this.props.highlights.get(speech.index)}
+            highlights={highlights.get(speech.index, List())}
             onClick={this.props.onSpeechClick}
             progress={progress(this.props.time, speech.start, speech.end)}
             start={speech.start}

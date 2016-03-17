@@ -1,19 +1,19 @@
 'use strict'
 
 import React from 'react'
-import Immutable from 'immutable'
+import {List} from 'immutable'
 import highlight from './highlight'
 
 class SpeechView extends React.Component {
   static propTypes =
-    { highlights: React.PropTypes.instanceOf(Immutable.List)
+    { highlights: React.PropTypes.instanceOf(List)
     , onClick: React.PropTypes.func.isRequired
     , progress: React.PropTypes.string
     , start: React.PropTypes.number.isRequired
     , text: React.PropTypes.string.isRequired
     };
   static defaultProps =
-    { highlights: Immutable.List.of()
+    { highlights: List()
     , progress: ''
     };
   constructor(props) {
