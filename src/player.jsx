@@ -1,11 +1,14 @@
 'use strict'
 
 import React from 'react'
+import {Map} from 'immutable'
 import AudioPlayer from './audio'
 import SearchBox from './searchbox'
 import SearchResults from './searchresults'
 import TranscriptView from './transcript'
 import * as search from './search'
+
+const MIN_QUERY_LEN = 3
 
 class TranscriptPlayer extends React.Component {
   static propTypes =
@@ -30,6 +33,8 @@ class TranscriptPlayer extends React.Component {
     this.handlePlaying = this.handlePlaying.bind(this)
     this.handleSeekRequest = this.handleSeekRequest.bind(this)
     this.handleQuery = this.handleQuery.bind(this)
+    this.findNextResultTime = this.findNextResultTime.bind(this)
+    this.findPrevResultTime = this.findPrevResultTime.bind(this)
     this.handleNavigateResult = this.handleNavigateResult.bind(this)
     this.state =
       { time: 0
@@ -37,8 +42,7 @@ class TranscriptPlayer extends React.Component {
       , playing: false
       , ended: false
       , query: ''
-      , searchResults: search.execute(props.transcript.turns)
-      , resultIndex: null
+      , searchResults: null
       }
   }
   componentWillReceiveProps(nextProps) {
@@ -69,28 +73,53 @@ class TranscriptPlayer extends React.Component {
     this.setState({seekTime: seekTime, ended: false})
   }
   handleQuery(query) {
-    const re = query === '' ? null : new RegExp(query, 'ig')
-        , results = search.execute(this.props.transcript.turns, re)
-    this.setState({query: query, searchResults: results, resultIndex: null})
+    if (query.length < MIN_QUERY_LEN) {
+      this.setState({query, searchResults: null})
+    } else {
+      const searchResults = search.execute(
+        this.props.transcript.turns, new RegExp(query, 'ig'))
+      const times = searchResults.get('times')
+      if (times.size > 0) {
+        this.setState({query, searchResults
+          , seekTime: times.first(), playing: false, ended: false})
+      } else {
+        this.setState({query, searchResults})
+      }
+    }
+  }
+  findNextResultTime(searchResults) {
+    const times = searchResults.get('times')
+    let seekTime = times.first()
+    for (let time of times.values()) {
+      if (time > this.state.time) {
+        seekTime = time
+        break
+      }
+    }
+    return seekTime
+  }
+  findPrevResultTime(searchResults) {
+    const times = searchResults.get('times')
+    let seekTime = times.last()
+    for (let time of times.reverse().values()) {
+      if (time < this.state.time) {
+        seekTime = time
+        break
+      }
+    }
+    return seekTime
   }
   handleNavigateResult(direction) {
-    if (this.state.searchResults.get('count') === 0) return
-    const times = this.state.searchResults.get('times')
-    let index = this.state.resultIndex
-    if (direction === 'forward') {
-      index = (index === null) ? 0 : index + 1
-      if (index === times.size) index = 0
-    } else {
-      index = (index === null) ? times.size - 1 : index - 1
-      if (index < 0) index = times.size - 1
-    }
-    this.setState({resultIndex: index})
-    this.handleSeekRequest(times.get(index))
+    if (this.state.searchResults === null) return
+    if (this.state.searchResults.get('times').size == 0) return
+    this.handleSeekRequest(direction === 'forward'
+      ? this.findNextResultTime(this.state.searchResults)
+      : this.findPrevResultTime(this.state.searchResults))
   }
   render() {
-    var searchResults = (
+    var searchResults = this.state.searchResults === null ? null : (
       <SearchResults
-        count={this.state.searchResults.get('count')}
+        count={this.state.searchResults.get('times').size}
         onNavigateResult={this.handleNavigateResult}
       />
     )
@@ -110,11 +139,12 @@ class TranscriptPlayer extends React.Component {
             onQuery={this.handleQuery}
             query={this.state.query}
           />
-          {this.state.query ? searchResults : ''}
+          {searchResults}
         </div>
         <TranscriptView
           ended={this.state.ended}
-          highlights={this.state.searchResults.get('matches')}
+          highlights={this.state.searchResults
+            ? this.state.searchResults.get('matches') : Map()}
           key={this.props.transcript.id}
           onSeekRequest={this.handleSeekRequest}
           speakers={this.props.transcript.speakers}

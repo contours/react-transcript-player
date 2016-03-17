@@ -52,15 +52,14 @@ export const execute = (turns, re=null) => {
   turns = fromJS(turns)
   const index = buildMatchIndex(turns, re)
   let times = List()
-    , count = 0
-  for (let [turn_idx, matches] of index.entries()) {
-    count += matches.size
+  index.keySeq().sort().forEach(turn_idx => {
+    let matches = index.get(turn_idx)
     times = times.concat(
       matches.map(match => {
         let speech_idx = match.keySeq().sort().first()
         return turns.get(turn_idx).get('speech').get(speech_idx).get('start')
       })
     )
-  }
-  return Map({ matches: index, times, count })
+  })
+  return Map({ matches: index, times })
 }
