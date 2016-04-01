@@ -29,11 +29,12 @@
   "scripts": {
     "lint": "eslint --ext .jsx src",
     "transpile": "babel src -d lib --source-maps inline",
-    "transpile-tests": "npm -s run transpile && babel test -d lib/test",
-    "test": "npm -s run transpile-tests && tape lib/test/*.js | tap-spec",
     "build": "npm -s run lint && npm -s run transpile",
+    "pretest": "npm -s run build && babel test -d lib/test",
+    "test": "tape lib/test/*.js | tap-spec",
     "build-watch": "watchy -s -w src -i '/#|/flycheck_' -- npm -s run build",
-    "prepublish": "babel src -d lib"
+    "prepublish": "babel src -d lib",
+    "preversion": "npm test"
   },
   "dependencies": {
     "immutable": "^3.7.5",
