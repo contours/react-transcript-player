@@ -1,6 +1,6 @@
 {
   "name": "react-transcript-player",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "React component for playing audio with a synced transcript",
   "repository": {
     "type": "git",
