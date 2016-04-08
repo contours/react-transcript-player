@@ -85,7 +85,8 @@ class TranscriptPlayer extends React.Component {
         this.setState(
           {query, searchResults, seekTime: times.first(), play: false})
       } else {
-        this.setState({query, searchResults})
+        this.setState(
+          {query, searchResults})
       }
     }
   }
