@@ -24,7 +24,7 @@ class TranscriptPlayer extends React.Component {
         , turns: React.PropTypes.arrayOf(React.PropTypes.object)
         }).isRequired
     };
-  static defaultProps = {play: false, seekTime: null};
+  static defaultProps = {play: null, seekTime: null};
   constructor(props) {
     super(props)
     this.handleTimeUpdate = this.handleTimeUpdate.bind(this)
@@ -39,13 +39,14 @@ class TranscriptPlayer extends React.Component {
     this.state =
       { time: 0
       , seekTime: props.seekTime
+      , play: props.play
       , playing: false
       , query: ''
       , searchResults: null
       }
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({seekTime: nextProps.seekTime})
+    this.setState({play: nextProps.play, seekTime: nextProps.seekTime})
   }
   handleTimeUpdate(unrounded_time) {
     const time = Math.round(unrounded_time)
@@ -63,6 +64,7 @@ class TranscriptPlayer extends React.Component {
     if (this.props.onPause) this.props.onPause()
   }
   handlePause() {
+    this.setState({playing: false})
     if (this.props.onPause) this.props.onPause()
   }
   handlePlaying() {
@@ -131,7 +133,7 @@ class TranscriptPlayer extends React.Component {
           onPause={this.handlePause}
           onPlaying={this.handlePlaying}
           onTimeUpdate={this.handleTimeUpdate}
-          play={this.state.playing}
+          play={this.state.play === null ? this.state.playing : this.state.play}
           seekTime={this.state.seekTime}
         />
         <div className="clearfix p1 mb1">

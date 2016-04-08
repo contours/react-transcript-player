@@ -50,9 +50,13 @@ class AudioPlayer extends React.Component {
       this.refs.audio.currentTime = this.props.seekTime
     }
     if (this.props.play) {
-      this.refs.audio.play()
+      if (this.refs.audio.paused) {
+        this.refs.audio.play()
+      }
     } else {
-      this.refs.audio.pause()
+      if (! (this.refs.audio.paused || this.refs.audio.ended)) {
+        this.refs.audio.pause()
+      }
     }
   }
   render() {
