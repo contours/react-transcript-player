@@ -40,7 +40,6 @@ class TranscriptPlayer extends React.Component {
       { time: 0
       , seekTime: props.seekTime
       , playing: false
-      , ended: false
       , query: ''
       , searchResults: null
       }
@@ -59,8 +58,9 @@ class TranscriptPlayer extends React.Component {
       this.setState({time: time})
     }
   }
-  handleEnded(ended) {
-    this.setState({ended: ended})
+  handleEnded() {
+    this.setState({playing: false})
+    if (this.props.onPause) this.props.onPause()
   }
   handlePause() {
     if (this.props.onPause) this.props.onPause()
@@ -70,7 +70,7 @@ class TranscriptPlayer extends React.Component {
     if (this.props.onPlaying) this.props.onPlaying()
   }
   handleSeekRequest(seekTime) {
-    this.setState({seekTime: seekTime, ended: false})
+    this.setState({seekTime: seekTime})
   }
   handleQuery(query) {
     if (query.length < MIN_QUERY_LEN) {
@@ -80,8 +80,8 @@ class TranscriptPlayer extends React.Component {
         this.props.transcript.turns, new RegExp(query, 'ig'))
       const times = searchResults.get('times')
       if (times.size > 0) {
-        this.setState({query, searchResults
-          , seekTime: times.first(), playing: false, ended: false})
+        this.setState(
+          {query, searchResults, seekTime: times.first(), play: false})
       } else {
         this.setState({query, searchResults})
       }
@@ -142,7 +142,6 @@ class TranscriptPlayer extends React.Component {
           {searchResults}
         </div>
         <TranscriptView
-          ended={this.state.ended}
           highlights={this.state.searchResults
             ? this.state.searchResults.get('matches') : Map()}
           key={this.props.transcript.id}

@@ -8,16 +8,14 @@ import {progress, debounce} from './utils'
 
 class TranscriptView extends React.Component {
   static propTypes =
-    { ended: React.PropTypes.bool
-    , highlights: React.PropTypes.instanceOf(Map)
+    { highlights: React.PropTypes.instanceOf(Map)
     , onSeekRequest: React.PropTypes.func.isRequired
     , speakers: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
     , time: React.PropTypes.number.isRequired
     , turns: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
     };
   static defaultProps =
-    { ended: false
-    , highlights: Map()
+    { highlights: Map()
     };
   constructor(props) {
     super(props)

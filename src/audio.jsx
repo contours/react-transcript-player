@@ -41,10 +41,9 @@ class AudioPlayer extends React.Component {
   }
   handlePlaying() {
     this.props.onPlaying()
-    this.props.onEnded(false)
   }
   handleEnded() {
-    this.props.onEnded(true)
+    this.props.onEnded()
   }
   seek() {
     if (this.props.seekTime !== null) {
