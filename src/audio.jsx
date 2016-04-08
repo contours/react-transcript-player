@@ -15,7 +15,6 @@ class AudioPlayer extends React.Component {
   static defaultProps = {play: false, seekTime: null};
   constructor(props) {
     super(props)
-    this.handleCanPlay = this.handleCanPlay.bind(this)
     this.handleTimeUpdate = this.handleTimeUpdate.bind(this)
     this.handlePause = this.handlePause.bind(this)
     this.handlePlaying = this.handlePlaying.bind(this)
@@ -32,9 +31,6 @@ class AudioPlayer extends React.Component {
     )
   }
   componentDidUpdate() {
-    this.seek()
-  }
-  handleCanPlay() {
     this.seek()
   }
   handleTimeUpdate() {
